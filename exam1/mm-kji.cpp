@@ -9,7 +9,26 @@ void mm_kji(T a,
             std::vector<T>& C,
             int m, int p, int n)
 {
+   // Bounds checking
+   if(A.size() != m*p){std::cout << "Invalid A dim" << std::endl; return;}
+   if(B.size() != p*n){std::cout << "Invalid B dim" << std::endl; return;}
+   if(C.size() != m*n){std::cout << "Invalid C dim" << std::endl; return;}
 
+   // Do the math
+   for(auto k=0; k<p; ++k)
+   {
+      for(auto j=0; j<n; ++j)
+      {
+         auto kj = j*p+k;
+         for(auto i=0; i<m; ++i)
+         {
+            auto ij = j*m+i;
+            auto ik = k*m+i;
+            if(k == 0) C[ij] *= b; // First time through this column (of C)
+            C[ij] += a*A[ik]*B[kj]; 
+         }
+      }
+   }
 }
 
 template void mm_kji<double>(double a,

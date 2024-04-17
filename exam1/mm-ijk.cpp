@@ -14,23 +14,19 @@ void mm_ijk(T a,
    if(B.size() != p*n){std::cout << "Invalid B dim" << std::endl; return;}
    if(C.size() != m*n){std::cout << "Invalid C dim" << std::endl; return;}
 
-   // Multiply A and B
-   std::vector<T> AB;
-   AB.resize(m*n);
-
+   // Do the math
    for(auto i=0; i<m; ++i)
    {
       for(auto j=0; j<n; ++j)
       {
          auto ij = j*m+i;
-         T result = 0;
+         C[ij] *= b;
          for(auto k=0; k<p; ++k)
          {
             auto ik = k*m+i;
             auto kj = j*p+k;
-            result += A[ik]*B[kj]; 
+            C[ij] += a*A[ik]*B[kj]; 
          }
-         C[ij] = a * result + b * C[ij];
       }
    }
 }

@@ -81,9 +81,9 @@ void test_case_invalid_C_dims()
    mm_ijk(1, A, B, 1, iC, m, p, n);
 }
 
-void test_case_alpha_beta_equal_1()
+void test_case_ijk_alpha_beta_equal_1()
 {
-   std::cout << "Test case alpha=1, beta=1" << std::endl;
+   std::cout << "Test case IJK alpha=1, beta=1" << std::endl;
    std::vector<int> mC;
    for(auto i : C){mC.push_back(i);}
    mm_ijk(1, A, B, 1, mC, m, p, n);
@@ -92,12 +92,122 @@ void test_case_alpha_beta_equal_1()
    check_result(mC, R1);
 }
 
-void test_case_alpha_2_beta_3()
+void test_case_ijk_alpha_2_beta_3()
 {
-   std::cout << "Test case alpha=2, beta=3" << std::endl;
+   std::cout << "Test case IJK alpha=2, beta=3" << std::endl;
    std::vector<int> mC;
    for(auto i : C){mC.push_back(i);}
    mm_ijk(2, A, B, 3, mC, m, p, n);
+   std::cout << "aAB + bC: " << std::endl;
+   print_matrix(mC, m, n);
+   check_result(mC, R2);
+}
+
+void test_case_ikj_alpha_beta_equal_1()
+{
+   std::cout << "Test case IKJ alpha=1, beta=1" << std::endl;
+   std::vector<int> mC;
+   for(auto i : C){mC.push_back(i);}
+   mm_ikj(1, A, B, 1, mC, m, p, n);
+   std::cout << "AB + C: " << std::endl;
+   print_matrix(mC, m, n);
+   check_result(mC, R1);
+}
+
+void test_case_ikj_alpha_2_beta_3()
+{
+   std::cout << "Test case IKJ alpha=2, beta=3" << std::endl;
+   std::vector<int> mC;
+   for(auto i : C){mC.push_back(i);}
+   mm_ikj(2, A, B, 3, mC, m, p, n);
+   std::cout << "aAB + bC: " << std::endl;
+   print_matrix(mC, m, n);
+   check_result(mC, R2);
+}
+
+void test_case_jik_alpha_beta_equal_1()
+{
+   std::cout << "Test case JIK alpha=1, beta=1" << std::endl;
+   std::vector<int> mC;
+   for(auto i : C){mC.push_back(i);}
+   mm_jik(1, A, B, 1, mC, m, p, n);
+   std::cout << "AB + C: " << std::endl;
+   print_matrix(mC, m, n);
+   check_result(mC, R1);
+}
+
+void test_case_jik_alpha_2_beta_3()
+{
+   std::cout << "Test case JIK alpha=2, beta=3" << std::endl;
+   std::vector<int> mC;
+   for(auto i : C){mC.push_back(i);}
+   mm_jik(2, A, B, 3, mC, m, p, n);
+   std::cout << "aAB + bC: " << std::endl;
+   print_matrix(mC, m, n);
+   check_result(mC, R2);
+}
+
+void test_case_jki_alpha_beta_equal_1()
+{
+   std::cout << "Test case JKI alpha=1, beta=1" << std::endl;
+   std::vector<int> mC;
+   for(auto i : C){mC.push_back(i);}
+   mm_jki(1, A, B, 1, mC, m, p, n);
+   std::cout << "AB + C: " << std::endl;
+   print_matrix(mC, m, n);
+   check_result(mC, R1);
+}
+
+void test_case_jki_alpha_2_beta_3()
+{
+   std::cout << "Test case JKI alpha=2, beta=3" << std::endl;
+   std::vector<int> mC;
+   for(auto i : C){mC.push_back(i);}
+   mm_jki(2, A, B, 3, mC, m, p, n);
+   std::cout << "aAB + bC: " << std::endl;
+   print_matrix(mC, m, n);
+   check_result(mC, R2);
+}
+
+void test_case_kij_alpha_beta_equal_1()
+{
+   std::cout << "Test case KIJ alpha=1, beta=1" << std::endl;
+   std::vector<int> mC;
+   for(auto i : C){mC.push_back(i);}
+   mm_kij(1, A, B, 1, mC, m, p, n);
+   std::cout << "AB + C: " << std::endl;
+   print_matrix(mC, m, n);
+   check_result(mC, R1);
+}
+
+void test_case_kij_alpha_2_beta_3()
+{
+   std::cout << "Test case KIJ alpha=2, beta=3" << std::endl;
+   std::vector<int> mC;
+   for(auto i : C){mC.push_back(i);}
+   mm_kij(2, A, B, 3, mC, m, p, n);
+   std::cout << "aAB + bC: " << std::endl;
+   print_matrix(mC, m, n);
+   check_result(mC, R2);
+}
+
+void test_case_kji_alpha_beta_equal_1()
+{
+   std::cout << "Test case KJI alpha=1, beta=1" << std::endl;
+   std::vector<int> mC;
+   for(auto i : C){mC.push_back(i);}
+   mm_kji(1, A, B, 1, mC, m, p, n);
+   std::cout << "AB + C: " << std::endl;
+   print_matrix(mC, m, n);
+   check_result(mC, R1);
+}
+
+void test_case_kji_alpha_2_beta_3()
+{
+   std::cout << "Test case KJI alpha=2, beta=3" << std::endl;
+   std::vector<int> mC;
+   for(auto i : C){mC.push_back(i);}
+   mm_kji(2, A, B, 3, mC, m, p, n);
    std::cout << "aAB + bC: " << std::endl;
    print_matrix(mC, m, n);
    check_result(mC, R2);
@@ -115,6 +225,18 @@ int main()
    test_case_invalid_A_dims();
    test_case_invalid_B_dims();
    test_case_invalid_C_dims();
-   test_case_alpha_beta_equal_1();
-   test_case_alpha_2_beta_3();
+   test_case_ijk_alpha_beta_equal_1();
+   test_case_ijk_alpha_2_beta_3();
+   test_case_ikj_alpha_beta_equal_1();
+   test_case_ikj_alpha_2_beta_3();
+   test_case_jik_alpha_beta_equal_1();
+   test_case_jik_alpha_2_beta_3();
+   test_case_jki_alpha_beta_equal_1();
+   test_case_jki_alpha_2_beta_3();
+   test_case_kij_alpha_beta_equal_1();
+   test_case_kij_alpha_2_beta_3();
+   test_case_kji_alpha_beta_equal_1();
+   test_case_kji_alpha_2_beta_3();
+
+   std::cout << "PASS" << std::endl;  // Pass if no assertions
 }
