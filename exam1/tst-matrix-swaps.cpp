@@ -62,6 +62,40 @@ int main()
    std::cout << "After swap:" << std::endl;
    print_matrix<double>(mB, m, n);
 
+   // The next ones should fail bounds check...
+   std::cout << "Should fail:" << std::endl;
+   swapRows(mB, 0, 4, 0, 2);
+   std::cout << "Should fail:" << std::endl;
+   swapRows(mB, 3, 0, 0, 2);
+   std::cout << "Should fail:" << std::endl;
+   swapRows(mB, 4, 4, 0, 2);
+   std::cout << "Should fail:" << std::endl;
+   swapRows(mB, 3, 5, 0, 2);
+   std::cout << "Should fail:" << std::endl;
+   swapRows(mB, 3, 4, -1, 2);
+   std::cout << "Should fail:" << std::endl;
+   swapRows(mB, 3, 4, 0, -1);
+   std::cout << "Should fail:" << std::endl;
+   swapRows(mB, 3, 4, 3, 2);
+   std::cout << "Should fail:" << std::endl;
+   swapRows(mB, 3, 4, 1, 4);
+   std::cout << "Should fail:" << std::endl;
+   swapCols(mB, 4, 4, 0, 2);
+   std::cout << "Should fail:" << std::endl;
+   swapCols(mB, 3, 5, 0, 2);
+   std::cout << "Should fail:" << std::endl;
+   swapCols(mB, 3, 4, -1, 2);
+   std::cout << "Should fail:" << std::endl;
+   swapCols(mB, 3, 4, 0, -1);
+   std::cout << "Should fail:" << std::endl;
+   swapCols(mB, 3, 4, 3, 2);
+   std::cout << "Should fail:" << std::endl;
+   swapCols(mB, 3, 4, 1, 4);
+   std::cout << "Should fail:" << std::endl;
+   swapCols(mB, 0, 4, 0, 2);
+   std::cout << "Should fail:" << std::endl;
+   swapCols(mB, 3, 0, 0, 2);
+
    auto start = std::chrono::high_resolution_clock::now();
    auto stop = std::chrono::high_resolution_clock::now();
    auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
