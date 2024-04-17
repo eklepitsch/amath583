@@ -68,7 +68,7 @@ int main()
    long double elapsedtime = 0.L;
    long double avgtime;
    const unsigned ntrials = 5;
-   for(unsigned p=4; p<13; ++p)
+   for(unsigned p=4; p<16; ++p)
    {
       unsigned n = 0x1 << p;
       std::cout << "n: " << n << std::endl;
