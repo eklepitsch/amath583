@@ -22,10 +22,15 @@ void mm_ijk(T a,
    {
       for(auto j=0; j<n; ++j)
       {
+         auto ij = j*m+i;
+         T result = 0;
          for(auto k=0; k<p; ++k)
          {
-
+            auto ik = k*m+i;
+            auto kj = j*p+k;
+            result += A[ik]*B[kj]; 
          }
+         C[ij] = a * result + b * C[ij];
       }
    }
 }
