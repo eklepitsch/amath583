@@ -1,5 +1,6 @@
 #include "matrix_swaps.hpp"
 #include <chrono>
+#include <cstdlib>
 #include <iomanip>
 #include <utility>
 
@@ -23,24 +24,25 @@ void print_matrix(const std::vector<T>& matrix, int m, int n)
    }
 }
 
+std::vector<double> GenerateSquareMatrix(unsigned n)
+{
+   std::vector<double> matrix;
+   matrix.reserve(n*n);
+   for(auto i=0; i < n*n; ++i) matrix.push_back((double)(std::rand() % 100));
+   return matrix;
+}
+
 // For std::pair
-std::pair<int, int> getRandomIndices(int n)
+std::pair<int, int> GetRandomIndices(int n)
 {
    int i = std::rand() % n;
    int j = std::rand() % (n - 1);
    if (j >= i)
    {
-   j++;
+      j++;
    }
    return std::make_pair(i, j);
 }
-
-// ...from inside main()
-// std::pair<int, int> rowIndices = getRandomIndices(M);
-// int i = rowIndices.first;
-// int j = rowIndices.second;
-// std::pair<int, int> colIndices = getRandomIndices(N);
-// ...
 
 int main()
 {
@@ -60,28 +62,44 @@ int main()
    std::cout << "After swap:" << std::endl;
    print_matrix<double>(mB, m, n);
 
-   //timer foo
-   auto start=std::chrono::high_resolution_clock::now();
-   auto stop=std::chrono::high_resolution_clock::now();
-   auto duration=std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
-   long double elapsedtime=0.L;
+   auto start = std::chrono::high_resolution_clock::now();
+   auto stop = std::chrono::high_resolution_clock::now();
+   auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
+   long double elapsedtime = 0.L;
    long double avgtime;
-   const int ntrials=3;
-   //loop on problem size
-   for(int i=2;i<=128;i++)
+   const unsigned ntrials = 5;
+   for(unsigned p=4; p<13; ++p)
    {
-      //perform an experiment
-      for(int t=0;t<ntrials;t++)
+      unsigned n = 0x1 << p;
+      std::cout << "n: " << n << std::endl;
+      auto M = GenerateSquareMatrix(n);
+
+      for(auto i=0; i<ntrials; ++i)
       {
-         start=std::chrono::high_resolution_clock::now();
-         //do work(size i, trial t)
-         stop=std::chrono::high_resolution_clock::now();
-         duration=std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
-         elapsedtime+=(duration.count()*1.e-9); //Convert duration to seconds
+         auto swapIndices = GetRandomIndices(n);
+
+         start = std::chrono::high_resolution_clock::now();
+         swapRows(M, n, n, swapIndices.first, swapIndices.second);
+         stop = std::chrono::high_resolution_clock::now();
+         duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
+         elapsedtime += (duration.count()*1.e-9); //Convert duration to seconds
       }
-      avgtime=elapsedtime/static_cast<long double>(ntrials);
-      //save or report findings
-      //zero time again
+      avgtime = elapsedtime/static_cast<long double>(ntrials);
+      std::cout << std::setprecision(10) << "Row swap avg time: " << avgtime << std::endl;
+      elapsedtime=0.L;
+
+      for(auto i=0; i<ntrials; ++i)
+      {
+         auto swapIndices = GetRandomIndices(n);
+
+         start = std::chrono::high_resolution_clock::now();
+         swapCols(M, n, n, swapIndices.first, swapIndices.second);
+         stop = std::chrono::high_resolution_clock::now();
+         duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
+         elapsedtime += (duration.count()*1.e-9); //Convert duration to seconds
+      }
+      avgtime = elapsedtime/static_cast<long double>(ntrials);
+      std::cout << std::setprecision(10) << "Col swap avg time: " << avgtime << std::endl;
       elapsedtime=0.L;
    }
 }
