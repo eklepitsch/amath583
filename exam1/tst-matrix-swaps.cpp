@@ -68,10 +68,9 @@ int main()
    long double elapsedtime = 0.L;
    long double avgtime;
    const unsigned ntrials = 5;
-   for(unsigned p=4; p<16; ++p)
+   for(unsigned p=4; p<13; ++p)
    {
       unsigned n = 0x1 << p;
-      std::cout << "n: " << n << std::endl;
       auto M = GenerateSquareMatrix(n);
 
       for(auto i=0; i<ntrials; ++i)
@@ -85,8 +84,15 @@ int main()
          elapsedtime += (duration.count()*1.e-9); //Convert duration to seconds
       }
       avgtime = elapsedtime/static_cast<long double>(ntrials);
-      std::cout << std::setprecision(10) << "Row swap avg time: " << avgtime << std::endl;
+      std::cout << std::setprecision(10) << "Row swap avg time: " << n << " "
+         << avgtime << std::endl;
       elapsedtime=0.L;
+   }
+
+   for(unsigned p=4; p<13; ++p)
+   {
+      unsigned n = 0x1 << p;
+      auto M = GenerateSquareMatrix(n);
 
       for(auto i=0; i<ntrials; ++i)
       {
@@ -99,7 +105,8 @@ int main()
          elapsedtime += (duration.count()*1.e-9); //Convert duration to seconds
       }
       avgtime = elapsedtime/static_cast<long double>(ntrials);
-      std::cout << std::setprecision(10) << "Col swap avg time: " << avgtime << std::endl;
+      std::cout << std::setprecision(10) << "Col swap avg time: " << n << " "
+         << avgtime << std::endl;
       elapsedtime=0.L;
    }
 }

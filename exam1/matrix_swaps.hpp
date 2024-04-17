@@ -37,15 +37,10 @@ void swapCols(std::vector<double> &matrix, int nRows, int nCols, int i, int j)
       return;
    }
 
-   // auto k1_begin = matrix.begin() + nRows*i;
-   // auto k1_end = k1_begin + nRows;
-   // auto k2_begin = matrix.begin() + nRows*j;
-   // std::swap_ranges(k1_begin, k1_end, k2_begin);
-
    for(auto m=0; m<nRows; ++m)
    {
-      auto k1 = i*nCols+m;  // Column-major index of the swap value in row i
-      auto k2 = j*nCols+m;  // Column major index of the swap value in row j
+      auto k1 = i*nRows+m;  // Column-major index of the swap value in row i
+      auto k2 = j*nRows+m;  // Column major index of the swap value in row j
       auto temp = matrix[k1];
       matrix[k1] = matrix[k2];
       matrix[k2] = temp;
