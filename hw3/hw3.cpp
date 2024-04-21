@@ -1,6 +1,8 @@
 #include "matrix-utils.hpp"
 #include "mm-jki.hpp"
 #include "mm-kij.hpp"
+#include "ref_daxpy.hpp"
+#include <cassert>
 #include <chrono>
 #include <cmath>
 #include <fstream>
@@ -71,9 +73,72 @@ void problem_1()
    }
 }
 
+void test_daxpy()
+{
+   std::cout << "Testing daxpy..." << std::endl;
+   double a = 3;
+   std::vector<double> x = {90, 59, 63, 26};
+   std::vector<double> y = {40, 26, 72, 36};
+   std::vector<double> z = {40, 26, 72, 36, 22};
+   std::cout << "Expect invalid" << std::endl;
+   daxpy(a, x, z);
+   std::cout << "Expect pass" << std::endl;
+   daxpy(a, x, y);
+   std::vector<double> expected = {310, 203, 261, 114};
+   for(auto i=0; i<x.size(); ++i)
+   {
+      assert(x.size() == y.size());
+      assert(y[i] == expected[i]);
+   }
+   std::cout << "PASS" << std::endl;
+}
+
+long double measure_daxpy(size_t n, unsigned ntrials)
+{
+   auto start = std::chrono::high_resolution_clock::now();
+   auto stop = std::chrono::high_resolution_clock::now();
+   long double elapsedtime = 0.L;
+   long double avgtime;
+
+   for(unsigned i=0; i<ntrials; ++i)
+   {
+      auto x = GenerateRandomVector<double>(n);
+      auto y = GenerateRandomVector<double>(n);
+      double a = std::rand() % 10;
+      start = std::chrono::high_resolution_clock::now();
+      daxpy(a, *x, *y);
+      stop = std::chrono::high_resolution_clock::now();
+      auto duration =
+         std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
+      elapsedtime += (duration.count()*1.e-9); //Convert duration to seconds
+   }
+   avgtime = elapsedtime/static_cast<long double>(ntrials);
+   return avgtime;
+}
+
+void problem_2()
+{
+   test_daxpy(); 
+
+   std::ofstream daxpy_results;
+   daxpy_results.open("daxpy_results.csv");
+   for(auto n=2; n<=512; ++n)
+   {
+      // O(n), 2 because we have 1 multiply and 1 add
+      auto flops = 2 * n;
+      auto result = measure_daxpy(n, 5);
+      daxpy_results << std::fixed << std::setprecision(0) <<
+         n << ", " << flops << ", " <<
+         std::scientific << std::setprecision(10) << result << ", " <<
+         flops/result << std::endl;
+   }
+   daxpy_results.close();
+}
+
 int main()
 {
    std::cout << "HW 3" << std::endl;
-   problem_1();
+   //problem_1();
+   problem_2();
    return 0;
 }
