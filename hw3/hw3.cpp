@@ -294,9 +294,48 @@ void test_dgemm()
    std::cout << "PASS" << std::endl;
 }
 
+long double measure_dgemm(std::size_t n, unsigned ntrials)
+{
+   auto start = std::chrono::high_resolution_clock::now();
+   auto stop = std::chrono::high_resolution_clock::now();
+   long double elapsedtime = 0.L;
+   long double avgtime;
+
+   for(unsigned i=0; i<ntrials; ++i)
+   {
+      double a = std::rand() % 10;
+      double b = std::rand() % 10;
+      auto A = GenerateRandomVectorOfVectors<double>(n, n);
+      auto B = GenerateRandomVectorOfVectors<double>(n, n);
+      auto C = GenerateRandomVectorOfVectors<double>(n, n);
+      start = std::chrono::high_resolution_clock::now();
+      dgemm(a, *A, *B, b, *C);
+      stop = std::chrono::high_resolution_clock::now();
+      auto duration =
+         std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
+      elapsedtime += (duration.count()*1.e-9); //Convert duration to seconds
+   }
+   avgtime = elapsedtime/static_cast<long double>(ntrials);
+   return avgtime;
+}
+
 void problem_4()
 {
    test_dgemm();
+
+   std::ofstream dgemm_results;
+   dgemm_results.open("dgemm_results.csv");
+   for(auto n=2; n<=512; ++n)
+   {
+      // 3 * O(n^3) + O(n^2)
+      auto flops = 3 * std::pow(n, 3) + std::pow(n, 2);
+      auto result = measure_dgemm(n, 5);
+      dgemm_results << std::fixed << std::setprecision(0) <<
+         n << ", " << flops << ", " <<
+         std::scientific << std::setprecision(10) << result << ", " <<
+         flops/result << std::endl;
+   }
+   dgemm_results.close();
 }
 
 int main()
