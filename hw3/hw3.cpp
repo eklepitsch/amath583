@@ -1,9 +1,12 @@
 #include "matrix-utils.hpp"
 #include "mm-jki.hpp"
 #include "mm-kij.hpp"
+#include "ref_axpyt.hpp"
 #include "ref_daxpy.hpp"
 #include "ref_dgemv.hpp"
 #include "ref_dgemm.hpp"
+#include "ref_gemmt.hpp"
+#include "ref_gemvt.hpp"
 #include <cassert>
 #include <chrono>
 #include <cmath>
@@ -338,12 +341,152 @@ void problem_4()
    dgemm_results.close();
 }
 
+void test_axpy()
+{
+   std::cout << "Testing axpy..." << std::endl;
+   double a = 3;
+   std::vector<double> x = {90, 59, 63, 26};
+   std::vector<double> y = {40, 26, 72, 36};
+   std::vector<double> z = {40, 26, 72, 36, 22};
+   std::cout << "Expect invalid" << std::endl;
+   axpy<double>(a, x, z);
+   std::cout << "Expect pass" << std::endl;
+   axpy<double>(a, x, y);
+   std::vector<double> expected = {310, 203, 261, 114};
+   for(auto i=0; i<x.size(); ++i)
+   {
+      assert(x.size() == y.size());
+      assert(y[i] == expected[i]);
+   }
+   std::cout << "PASS" << std::endl;
+}
+
+void test_gemv()
+{
+   std::cout << "Testing gemv..." << std::endl;
+   typedef std::vector<std::vector<double>> matrix_t;
+   matrix_t A = {{1, 5, 6},
+                 {2, 3, 5}};
+   std::vector<double> x = {2, 4, 6};
+   std::vector<double> y = {1, 3};
+   std::vector<double> expected = {119, 101};
+   double a = 2;
+   double b = 3;
+   std::cout << "Expect invalid..." << std::endl;
+   auto x2 = x; x2.push_back(0);
+   gemv<double>(a, A, x2, b, y);
+   std::cout << "Expect invalid..." << std::endl;
+   auto y2 = y; y2.push_back(0);
+   gemv<double>(a, A, x, b, y2);
+   std::cout << "Expect invalid..." << std::endl;
+   auto A2 = A; A2[1].push_back(0);
+   gemv<double>(a, A2, x, b, y);
+   std::cout << "Expect pass..." << std::endl;
+   y = {1, 3};  // Reset y in case it was modified
+   gemv<double>(a, A, x, b, y);
+   assert(y.size() == expected.size());
+   for(auto i=0; i<y.size(); ++i)
+   {
+      assert(y[i] == expected[i]);
+   }
+   std::cout << "PASS" << std::endl;
+}
+
+void test_gemm()
+{
+   std::cout << "Testing dgemm..." << std::endl;
+   constexpr int m = 2;
+   constexpr int n = 4;
+   constexpr int p = 3;
+   // A = m x p
+   // [ 1, 2, 3 ]
+   // [ 4, 5, 6 ]
+   std::vector<std::vector<double>> A = {{1, 2, 3},
+                                         {4, 5, 6}};
+
+   // B = p x n
+   // [ 1, 2, 3, 4 ]
+   // [ 3, 4, 7, 8 ]
+   // [ 9, 0, 1, 2 ]
+   std::vector<std::vector<double>> B = {{1, 2, 3, 4},
+                                         {3, 4, 7, 8},
+                                         {9, 0, 1, 2}};
+
+   // C = m x n
+   // [ 1, 2, 3, 4 ]
+   // [ 5, 6, 7, 8 ]
+   std::vector<std::vector<double>> C = {{1, 2, 3, 4},
+                                         {5, 6, 7, 8}};
+
+   // Expected result for alpha=1, beta=1
+   // [ 35, 12, 23, 30 ]
+   // [ 78, 34, 60, 76 ]
+   const std::vector<std::vector<double>> R1 = {{35, 12, 23, 30},
+                                                {78, 34, 60, 76}};
+
+   // Expected result for alpha=2, beta=3
+   // [  71, 26,  49,  64 ]
+   // [ 161, 74, 127, 160 ]
+   const std::vector<std::vector<double>> R2 = {{71,  26, 49,  64},
+                                                {161, 74, 127, 160}};
+
+   std::cout << "Expect invalid..." << std::endl;
+   auto A2 = A; A2.push_back({7, 8, 9});
+   gemm<double>(1, A2, B, 1, C);
+   std::cout << "Expect invalid..." << std::endl;
+   A2 = A; A2[0].push_back(0);
+   gemm<double>(1, A2, B, 1, C);
+   std::cout << "Expect invalid..." << std::endl;
+   auto B2 = B; B2.push_back({7, 8, 9, 10});
+   gemm<double>(1, A, B2, 1, C);
+   std::cout << "Expect invalid..." << std::endl;
+   B2 = B; B2[0].push_back(0);
+   gemm<double>(1, A, B2, 1, C);
+   std::cout << "Expect invalid..." << std::endl;
+   auto C2 = C; C2.push_back({7, 8, 9, 10});
+   gemm<double>(1, A, B, 1, C2);
+   std::cout << "Expect invalid..." << std::endl;
+   C2 = C; C2[0].push_back(0);
+   gemm<double>(1, A, B, 1, C2);
+
+   std::cout << "Testing a=1, b=1..." << std::endl;
+   auto Cm = C;  // "mutable"
+   gemm<double>(1, A, B, 1, Cm);
+   for(auto i=0; i<m; ++i)
+   {
+      for(auto j=0; j<n; ++j)
+      {
+         assert(Cm[i][j] == R1[i][j]);
+      }
+   }
+
+   std::cout << "Testing a=2, b=3..." << std::endl;
+   Cm = C;  // "mutable"
+   dgemm(2, A, B, 3, Cm);
+   for(auto i=0; i<m; ++i)
+   {
+      for(auto j=0; j<n; ++j)
+      {
+         assert(Cm[i][j] == R2[i][j]);
+      }
+   }
+   std::cout << "PASS" << std::endl;
+}
+
+void problem_5()
+{
+   test_axpy();
+   test_gemv();
+   test_gemm();
+}
+
 int main()
 {
    std::cout << "HW 3" << std::endl;
    //problem_1();
    //problem_2();
    //problem_3();
-   problem_4();
+   //problem_4();
+   problem_5();
    return 0;
 }
