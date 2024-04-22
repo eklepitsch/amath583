@@ -3,6 +3,7 @@
 #include "mm-kij.hpp"
 #include "ref_daxpy.hpp"
 #include "ref_dgemv.hpp"
+#include "ref_dgemm.hpp"
 #include <cassert>
 #include <chrono>
 #include <cmath>
@@ -212,11 +213,98 @@ void problem_3()
    dgemv_results.close();
 }
 
+void test_dgemm()
+{
+   std::cout << "Testing dgemm..." << std::endl;
+   constexpr int m = 2;
+   constexpr int n = 4;
+   constexpr int p = 3;
+   // A = m x p
+   // [ 1, 2, 3 ]
+   // [ 4, 5, 6 ]
+   std::vector<std::vector<double>> A = {{1, 2, 3},
+                                         {4, 5, 6}};
+
+   // B = p x n
+   // [ 1, 2, 3, 4 ]
+   // [ 3, 4, 7, 8 ]
+   // [ 9, 0, 1, 2 ]
+   std::vector<std::vector<double>> B = {{1, 2, 3, 4},
+                                         {3, 4, 7, 8},
+                                         {9, 0, 1, 2}};
+
+   // C = m x n
+   // [ 1, 2, 3, 4 ]
+   // [ 5, 6, 7, 8 ]
+   std::vector<std::vector<double>> C = {{1, 2, 3, 4},
+                                         {5, 6, 7, 8}};
+
+   // Expected result for alpha=1, beta=1
+   // [ 35, 12, 23, 30 ]
+   // [ 78, 34, 60, 76 ]
+   const std::vector<std::vector<double>> R1 = {{35, 12, 23, 30},
+                                                {78, 34, 60, 76}};
+
+   // Expected result for alpha=2, beta=3
+   // [  71, 26,  49,  64 ]
+   // [ 161, 74, 127, 160 ]
+   const std::vector<std::vector<double>> R2 = {{71,  26, 49,  64},
+                                                {161, 74, 127, 160}};
+
+   std::cout << "Expect invalid..." << std::endl;
+   auto A2 = A; A2.push_back({7, 8, 9});
+   dgemm(1, A2, B, 1, C);
+   std::cout << "Expect invalid..." << std::endl;
+   A2 = A; A2[0].push_back(0);
+   dgemm(1, A2, B, 1, C);
+   std::cout << "Expect invalid..." << std::endl;
+   auto B2 = B; B2.push_back({7, 8, 9, 10});
+   dgemm(1, A, B2, 1, C);
+   std::cout << "Expect invalid..." << std::endl;
+   B2 = B; B2[0].push_back(0);
+   dgemm(1, A, B2, 1, C);
+   std::cout << "Expect invalid..." << std::endl;
+   auto C2 = C; C2.push_back({7, 8, 9, 10});
+   dgemm(1, A, B, 1, C2);
+   std::cout << "Expect invalid..." << std::endl;
+   C2 = C; C2[0].push_back(0);
+   dgemm(1, A, B, 1, C2);
+
+   std::cout << "Testing a=1, b=1..." << std::endl;
+   auto Cm = C;  // "mutable"
+   dgemm(1, A, B, 1, Cm);
+   for(auto i=0; i<m; ++i)
+   {
+      for(auto j=0; j<n; ++j)
+      {
+         assert(Cm[i][j] == R1[i][j]);
+      }
+   }
+
+   std::cout << "Testing a=2, b=3..." << std::endl;
+   Cm = C;  // "mutable"
+   dgemm(2, A, B, 3, Cm);
+   for(auto i=0; i<m; ++i)
+   {
+      for(auto j=0; j<n; ++j)
+      {
+         assert(Cm[i][j] == R2[i][j]);
+      }
+   }
+   std::cout << "PASS" << std::endl;
+}
+
+void problem_4()
+{
+   test_dgemm();
+}
+
 int main()
 {
    std::cout << "HW 3" << std::endl;
    //problem_1();
    //problem_2();
-   problem_3();
+   //problem_3();
+   problem_4();
    return 0;
 }
