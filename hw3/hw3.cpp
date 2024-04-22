@@ -148,9 +148,19 @@ void test_dgemv()
                  {2, 3, 5}};
    std::vector<double> x = {2, 4, 6};
    std::vector<double> y = {1, 3};
+   std::vector<double> y_orig = {1, 3};
    std::vector<double> expected = {119, 101};
    double a = 2;
    double b = 3;
+   std::cout << "Empty vectors..." << std::endl;
+   std::vector<double> x_empty, y_empty;
+   matrix_t A_empty;
+   dgemv(a, A_empty, x, b, y);
+   assert(y == y_orig);
+   gemv<double>(a, A, x_empty, b, y);
+   assert(y == y_orig);
+   gemv<double>(a, A, x, b, y_empty);
+   assert(y == y_orig);
    std::cout << "Expect invalid..." << std::endl;
    auto x2 = x; x2.push_back(0);
    dgemv(a, A, x2, b, y);
@@ -161,7 +171,6 @@ void test_dgemv()
    auto A2 = A; A2[1].push_back(0);
    dgemv(a, A2, x, b, y);
    std::cout << "Expect pass..." << std::endl;
-   y = {1, 3};  // Reset y in case it was modified
    dgemv(a, A, x, b, y);
    assert(y.size() == expected.size());
    for(auto i=0; i<y.size(); ++i)
@@ -241,6 +250,8 @@ void test_dgemm()
    // [ 5, 6, 7, 8 ]
    std::vector<std::vector<double>> C = {{1, 2, 3, 4},
                                          {5, 6, 7, 8}};
+   std::vector<std::vector<double>> C_orig = {{1, 2, 3, 4},
+                                              {5, 6, 7, 8}};
 
    // Expected result for alpha=1, beta=1
    // [ 35, 12, 23, 30 ]
@@ -254,6 +265,14 @@ void test_dgemm()
    const std::vector<std::vector<double>> R2 = {{71,  26, 49,  64},
                                                 {161, 74, 127, 160}};
 
+   std::cout << "Empty vectors..." << std::endl;
+   std::vector<std::vector<double>> empty_A, empty_B, empty_C;
+   dgemm(1, empty_A, B, 1, C);
+   assert(C == C_orig);
+   dgemm(1, A, empty_B, 1, C);
+   assert(C == C_orig);
+   dgemm(1, A, B, 1, empty_C);
+   assert(C == C_orig);
    std::cout << "Expect invalid..." << std::endl;
    auto A2 = A; A2.push_back({7, 8, 9});
    dgemm(1, A2, B, 1, C);
@@ -349,6 +368,10 @@ void test_axpy()
    std::vector<T> x = {90, 59, 63, 26};
    std::vector<T> y = {40, 26, 72, 36};
    std::vector<T> z = {40, 26, 72, 36, 22};
+   std::cout << "Empty vectors" << std::endl;
+   std::vector<T> x_empty, y_empty;
+   axpy<T>(a, x_empty, y_empty);
+   assert(y_empty.size() == 0);
    std::cout << "Expect invalid" << std::endl;
    axpy<T>(a, x, z);
    std::cout << "Expect pass" << std::endl;
@@ -371,9 +394,19 @@ void test_gemv()
                  {2, 3, 5}};
    std::vector<T> x = {2, 4, 6};
    std::vector<T> y = {1, 3};
+   std::vector<T> y_orig = {1, 3};
    std::vector<T> expected = {119, 101};
    T a = 2;
    T b = 3;
+   std::cout << "Empty vectors..." << std::endl;
+   std::vector<T> x_empty, y_empty;
+   matrix_t A_empty;
+   gemv<T>(a, A_empty, x, b, y);
+   assert(y == y_orig);
+   gemv<T>(a, A, x_empty, b, y);
+   assert(y == y_orig);
+   gemv<T>(a, A, x, b, y_empty);
+   assert(y == y_orig);
    std::cout << "Expect invalid..." << std::endl;
    auto x2 = x; x2.push_back(0);
    gemv<T>(a, A, x2, b, y);
@@ -384,7 +417,6 @@ void test_gemv()
    auto A2 = A; A2[1].push_back(0);
    gemv<T>(a, A2, x, b, y);
    std::cout << "Expect pass..." << std::endl;
-   y = {1, 3};  // Reset y in case it was modified
    gemv<T>(a, A, x, b, y);
    assert(y.size() == expected.size());
    for(auto i=0; i<y.size(); ++i)
@@ -420,6 +452,8 @@ void test_gemm()
    // [ 5, 6, 7, 8 ]
    std::vector<std::vector<T>> C = {{1, 2, 3, 4},
                                     {5, 6, 7, 8}};
+   std::vector<std::vector<T>> C_orig = {{1, 2, 3, 4},
+                                         {5, 6, 7, 8}};
 
    // Expected result for alpha=1, beta=1
    // [ 35, 12, 23, 30 ]
@@ -433,6 +467,14 @@ void test_gemm()
    const std::vector<std::vector<T>> R2 = {{71,  26, 49,  64},
                                            {161, 74, 127, 160}};
 
+   std::cout << "Empty vectors..." << std::endl;
+   std::vector<std::vector<T>> empty_A, empty_B, empty_C;
+   gemm<T>(1, empty_A, B, 1, C);
+   assert(C == C_orig);
+   gemm<T>(1, A, empty_B, 1, C);
+   assert(C == C_orig);
+   gemm<T>(1, A, B, 1, empty_C);
+   assert(C == C_orig);
    std::cout << "Expect invalid..." << std::endl;
    auto A2 = A; A2.push_back({7, 8, 9});
    gemm<T>(1, A2, B, 1, C);

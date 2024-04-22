@@ -22,6 +22,12 @@ bool bounds_check(const std::vector<std::vector<T>>& A,
                   const std::vector<std::vector<T>>& B,
                   std::vector<std::vector<T>>& C)
 {
+    if(A.empty() || B.empty() || C.empty())
+    {
+        std::cout << "Empty matrix" << std::endl;
+        return false;
+    }
+
     auto mpn = get_mpn(A, B, C);
     auto m = std::get<0>(mpn);
     auto p = std::get<1>(mpn);
