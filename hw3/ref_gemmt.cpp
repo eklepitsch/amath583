@@ -1,1 +1,1 @@
-// Implementation is in header file.
+// Implementation is in the header file.
