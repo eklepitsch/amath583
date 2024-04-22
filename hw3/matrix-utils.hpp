@@ -39,12 +39,31 @@ std::unique_ptr<std::vector<T>> GenerateSquareMatrix(std::size_t n)
 }
 
 template<typename T>
-std::unique_ptr<std::vector<T>> GenerateRandomMatrix(std::size_t n,
-                                                     std::size_t m)
+std::unique_ptr<std::vector<T>> GenerateRandomMatrix(std::size_t m,
+                                                     std::size_t n)
 {
    auto matrix = std::make_unique<std::vector<T>>();
    matrix->reserve(n*m);
    for(auto i=0; i < n*m; ++i) matrix->push_back((T)(std::rand() % 100));
+   return matrix;
+}
+
+template<typename T>
+std::unique_ptr<std::vector<std::vector<T>>> 
+   GenerateRandomVectorOfVectors(std::size_t m, std::size_t n)
+{
+   auto matrix = std::make_unique<std::vector<std::vector<T>>>();
+   matrix->reserve(m);
+   for(auto i=0; i<m; ++i)
+   {
+      std::vector<T> row;
+      row.reserve(n);
+      for(auto j=0; j<n; ++j)
+      {
+         row.push_back((T)(std::rand() % 100));
+      }
+      matrix->push_back(row);
+   }
    return matrix;
 }
 

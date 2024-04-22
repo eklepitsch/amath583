@@ -2,6 +2,7 @@
 #include "mm-jki.hpp"
 #include "mm-kij.hpp"
 #include "ref_daxpy.hpp"
+#include "ref_dgemv.hpp"
 #include <cassert>
 #include <chrono>
 #include <cmath>
@@ -135,9 +136,80 @@ void problem_2()
    daxpy_results.close();
 }
 
+void test_dgemv()
+{
+   std::cout << "Testing dgemv..." << std::endl;
+   typedef std::vector<std::vector<double>> matrix_t;
+   matrix_t A = {{1, 5, 6},
+                 {2, 3, 5}};
+   std::vector<double> x = {2, 4, 6};
+   std::vector<double> y = {1, 3};
+   std::vector<double> expected = {119, 101};
+   double a = 2;
+   double b = 3;
+   std::cout << "Expect invalid..." << std::endl;
+   auto x2 = x; x2.push_back(0);
+   dgemv(a, A, x2, b, y);
+   std::cout << "Expect invalid..." << std::endl;
+   auto y2 = y; y2.push_back(0);
+   dgemv(a, A, x, b, y2);
+   std::cout << "Expect invalid..." << std::endl;
+   auto A2 = A; A2[1].push_back(0);
+   dgemv(a, A2, x, b, y);
+   std::cout << "Expect pass..." << std::endl;
+   y = {1, 3};  // Reset y in case it was modified
+   dgemv(a, A, x, b, y);
+   assert(y.size() == expected.size());
+   for(auto i=0; i<y.size(); ++i)
+   {
+      assert(y[i] == expected[i]);
+   }
+   std::cout << "PASS" << std::endl;
+}
+
+long double measure_dgemv(size_t n, unsigned ntrials)
+{
+   auto start = std::chrono::high_resolution_clock::now();
+   auto stop = std::chrono::high_resolution_clock::now();
+   long double elapsedtime = 0.L;
+   long double avgtime;
+   auto m = n;
+
+   for(unsigned i=0; i<ntrials; ++i)
+   {
+      double a = std::rand() % 10;
+      auto A = GenerateRandomVectorOfVectors<double>(m, n);
+      auto x = GenerateRandomVector<double>(n);
+      auto b = std::rand() % 10;
+      auto y = GenerateRandomVector<double>(m);
+      start = std::chrono::high_resolution_clock::now();
+      dgemv(a, *A, *x, b, *y);
+      stop = std::chrono::high_resolution_clock::now();
+      auto duration =
+         std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
+      elapsedtime += (duration.count()*1.e-9); //Convert duration to seconds
+   }
+   avgtime = elapsedtime/static_cast<long double>(ntrials);
+   return avgtime;
+}
+
 void problem_3()
 {
+   test_dgemv();
 
+   std::ofstream dgemv_results;
+   dgemv_results.open("dgemv_results.csv");
+   for(auto n=2; n<=512; ++n)
+   {
+      // O(n^2), 3 because we have 2 multiplies and 1 add
+      auto flops = 3 * n * n;
+      auto result = measure_dgemv(n, 5);
+      dgemv_results << std::fixed << std::setprecision(0) <<
+         n << ", " << flops << ", " <<
+         std::scientific << std::setprecision(10) << result << ", " <<
+         flops/result << std::endl;
+   }
+   dgemv_results.close();
 }
 
 int main()
