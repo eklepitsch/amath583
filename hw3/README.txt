@@ -1,6 +1,5 @@
 #!/bin/bash
 
-set -x
 INCLUDE_DIR=./include
 LIB_DIR=./lib
 mkdir -p $LIB_DIR
