@@ -1,12 +1,18 @@
 #include "matrix-utils.hpp"
-#include "mm-jki.hpp"
-#include "mm-kij.hpp"
-#include "ref_axpyt.hpp"
-#include "ref_daxpy.hpp"
-#include "ref_dgemv.hpp"
-#include "ref_dgemm.hpp"
-#include "ref_gemmt.hpp"
-#include "ref_gemvt.hpp"
+
+#ifdef USE_LIBRARY
+   #include "refBLAS.hpp"
+#else
+   #include "mm-jki.hpp"
+   #include "mm-kij.hpp"
+   #include "ref_axpyt.hpp"
+   #include "ref_daxpy.hpp"
+   #include "ref_dgemv.hpp"
+   #include "ref_dgemm.hpp"
+   #include "ref_gemmt.hpp"
+   #include "ref_gemvt.hpp"
+#endif
+
 #include <cassert>
 #include <chrono>
 #include <cmath>
@@ -16,6 +22,7 @@
 #include <map>
 #include <vector>
 
+#ifndef USE_LIBRARY
 template<typename T>
 std::pair<long double, long double> multiply_square_matrices(std::size_t n,
                                                              unsigned ntrials)
@@ -54,6 +61,7 @@ std::pair<long double, long double> multiply_square_matrices(std::size_t n,
 
 void problem_1()
 {
+   std::cout << "HW3, Problem 1" << std::endl;
    std::ofstream float_results, double_results;
    float_results.open("float_results.csv");
    double_results.open("double_results.csv");
@@ -77,6 +85,7 @@ void problem_1()
          std::endl;
    }
 }
+#endif // USE_LIBRARY
 
 void test_daxpy()
 {
@@ -123,6 +132,7 @@ long double measure_daxpy(size_t n, unsigned ntrials)
 
 void problem_2()
 {
+   std::cout << "HW3, Problem 2" << std::endl;
    test_daxpy(); 
 
    std::ofstream daxpy_results;
@@ -208,6 +218,7 @@ long double measure_dgemv(size_t n, unsigned ntrials)
 
 void problem_3()
 {
+   std::cout << "HW3, Problem 3" << std::endl;
    test_dgemv();
 
    std::ofstream dgemv_results;
@@ -343,6 +354,7 @@ long double measure_dgemm(std::size_t n, unsigned ntrials)
 
 void problem_4()
 {
+   std::cout << "HW3, Problem 4" << std::endl;
    test_dgemm();
 
    std::ofstream dgemm_results;
@@ -520,6 +532,7 @@ void test_gemm()
 
 void problem_5()
 {
+   std::cout << "HW3, Problem 5" << std::endl;
    test_axpy<int>();
    test_axpy<short>();
    test_axpy<unsigned>();
@@ -545,10 +558,12 @@ void problem_5()
 int main()
 {
    std::cout << "HW 3" << std::endl;
-   //problem_1();
-   //problem_2();
-   //problem_3();
-   //problem_4();
+#ifndef USE_LIBRARY
+   problem_1();
+#endif
+   problem_2();
+   problem_3();
+   problem_4();
    problem_5();
    return 0;
 }
