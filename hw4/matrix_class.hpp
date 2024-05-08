@@ -59,15 +59,16 @@ public:
     {
         auto result_rows = this->num_cols;
         auto result_cols = this->num_rows;
-        Matrix<T> result(result_rows, this->result_cols);
+        Matrix<T> result(result_rows, result_cols);
         for(auto i=0; i<this->num_rows; ++i)
         {
             for(auto j=0; j<this->num_cols; ++j)
             {
-                result[i * result_cols + j] =
-                    this->data[j * this->num_cols + i];
+                result.data[j * result_cols + i] =
+                    this->data[i * this->num_cols + j];
             }
         }
+        return result;
     }
 
     int numRows() const

@@ -15,6 +15,7 @@ using namespace std;
 //  Matrix<float> mAplusB2x2_;
 //};
 
+typedef std::vector<std::vector<float>> vMatrix;
 
 template<typename T>
 void print_matrix(const Matrix<T>& matrix)
@@ -63,12 +64,19 @@ Matrix<T> construct_matrix(const std::vector<std::vector<T>>& matrix)
   return m;
 }
 
-// Demonstrate some basic assertions.
-TEST(HelloTest, BasicAssertions) {
-  // Expect two strings not to be equal.
-  EXPECT_STRNE("hello", "world");
-  // Expect equality.
-  EXPECT_EQ(7 * 6, 42);
+template<typename T>
+void assert_matrices_are_equal(const Matrix<T>& a, const Matrix<T>& b)
+{
+  ASSERT_EQ(a.numRows(), b.numRows());
+  ASSERT_EQ(a.numCols(), b.numCols());
+
+  for(auto i=0; i< a.numRows(); ++i)
+  {
+    for(auto j=0; j< a.numCols(); ++j)
+    {
+      ASSERT_EQ(a(i, j), b(i, j));
+    }
+  }
 }
 
 TEST(MatrixTest, SimpleConstruction)
@@ -114,5 +122,46 @@ TEST(MatrixTest, VectorConstruction)
     }
     i++;
   }
-  
+}
+
+TEST(MatrixTest, Transpose1)
+{
+  vMatrix a = {{2, 2, 2, 2, 2},
+               {0, 0, 0, 0, 0}};
+  auto A = construct_matrix(a);
+  vMatrix at = {{2, 0},
+                {2, 0},
+                {2, 0},
+                {2, 0},
+                {2, 0}};
+  auto AT = construct_matrix(at);
+  auto result = A.transpose();
+  cout << "The matrix A:" << endl;
+  print_matrix(A);
+  cout << "The matrix A, transposed:" << endl;
+  print_matrix(result);
+  assert_matrices_are_equal(result, AT);
+}
+
+TEST(MatrixTest, Transpose2)
+{
+  vMatrix a = {{1, 2, 1, 2, 1},
+               {3, 4, 3, 4, 3},
+               {5, 6, 5, 6, 5},
+               {7, 8, 7, 8, 7},
+               {2, 1, 2, 1, 2},
+               {1, 1, 1, 1, 1},};
+  auto A = construct_matrix(a);
+  vMatrix at = {{1, 3, 5, 7, 2, 1},
+                {2, 4, 6, 8, 1, 1},
+                {1, 3, 5, 7, 2, 1},
+                {2, 4, 6, 8, 1, 1},
+                {1, 3, 5, 7, 2, 1}};
+  auto AT = construct_matrix(at);
+  auto result = A.transpose();
+  cout << "The matrix A:" << endl;
+  print_matrix(A);
+  cout << "The matrix A, transposed:" << endl;
+  print_matrix(result);
+  assert_matrices_are_equal(result, AT);
 }
