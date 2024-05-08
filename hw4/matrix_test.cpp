@@ -256,3 +256,39 @@ TEST(MatrixTest, Multiply2)
   print_matrix(result);
   assert_matrices_are_equal(result, AB);
 }
+
+TEST(MatrixTest, AddInvalidDimensions)
+{
+  auto a = Matrix<float>(2, 2);
+  auto b = Matrix<float>(3, 2);
+  EXPECT_ANY_THROW(a + b);
+  EXPECT_ANY_THROW(b + a);
+}
+
+TEST(MatrixTest, Add)
+{
+  vMatrix a = {{3, -3, 9},
+               {81, 30, -8}};
+  vMatrix b = {{5, 6, 7},
+               {8, 9, 0}};
+  vMatrix apb = {{8, 3, 16},
+                 {89, 39, -8}};
+
+  auto A = construct_matrix(a);
+  cout << "The matrix A:" << endl;
+  print_matrix(A);
+  auto B = construct_matrix(b);
+  cout << "The matrix B:" << endl;
+  print_matrix(B);
+  auto ApB = construct_matrix(apb);
+
+  auto result = A + B;
+  cout << "The matrix A + B:" << endl;
+  print_matrix(result);
+  assert_matrices_are_equal(result, ApB);
+
+  result = B + A;
+  cout << "The matrix B + A:" << endl;
+  print_matrix(result);
+  assert_matrices_are_equal(result, ApB);
+}
