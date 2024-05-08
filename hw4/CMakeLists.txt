@@ -27,3 +27,8 @@ target_link_libraries(
 
 include(GoogleTest)
 gtest_discover_tests(matrix_test)
+
+add_executable(
+  hw4
+  hw4.cpp
+)
