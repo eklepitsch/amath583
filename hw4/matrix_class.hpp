@@ -51,6 +51,7 @@ public:
                 }
             }
         }
+        return result;
     }
 
     Matrix<T> operator+(const Matrix<T> &other) const;

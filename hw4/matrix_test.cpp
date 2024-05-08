@@ -150,7 +150,7 @@ TEST(MatrixTest, Transpose2)
                {5, 6, 5, 6, 5},
                {7, 8, 7, 8, 7},
                {2, 1, 2, 1, 2},
-               {1, 1, 1, 1, 1},};
+               {1, 1, 1, 1, 1}};
   auto A = construct_matrix(a);
   vMatrix at = {{1, 3, 5, 7, 2, 1},
                 {2, 4, 6, 8, 1, 1},
@@ -164,4 +164,95 @@ TEST(MatrixTest, Transpose2)
   cout << "The matrix A, transposed:" << endl;
   print_matrix(result);
   assert_matrices_are_equal(result, AT);
+}
+
+TEST(MatrixTest, InfinityNorm1)
+{
+  vMatrix a = {{2, 2, 2, 2, 2},
+               {0, 0, 0, 0, 0}};
+  auto A = construct_matrix(a);
+  auto infinityNorm = A.infinityNorm();
+  ASSERT_EQ(infinityNorm, 10);
+}
+
+TEST(MatrixTest, InfinityNorm2)
+{
+  vMatrix a = {{1, 2, 1, 2, 1},
+               {3, 4, 3, 4, 3},
+               {5, 6, 5, 6, 5},
+               {7, 8, 7, 8, 7},
+               {2, 1, 2, 1, 2},
+               {1, 1, 1, 1, 1}};
+  auto A = construct_matrix(a);
+  auto infinityNorm = A.infinityNorm();
+  ASSERT_EQ(infinityNorm, 37);
+}
+
+TEST(MatrixTest, MultiplyInvalidDimensions)
+{
+  auto a = Matrix<float>(2, 2);
+  auto b = Matrix<float>(3, 2);
+  EXPECT_ANY_THROW(a * b);
+  EXPECT_NO_THROW(b * a);
+}
+
+TEST(MatrixTest, Multiply1)
+{
+  vMatrix a = {{1, 2},
+               {3, 4}};
+  vMatrix b = {{5, 6, 7},
+               {8, 9, 0}};
+  vMatrix ab = {{21, 24, 7},
+                {47, 54, 21}};
+
+  auto A = construct_matrix(a);
+  cout << "The matrix A:" << endl;
+  print_matrix(A);
+  auto B = construct_matrix(b);
+  cout << "The matrix B:" << endl;
+  print_matrix(B);
+  auto AB = construct_matrix(ab);
+
+  auto result = A * B;
+  cout << "The matrix A * B:" << endl;
+  print_matrix(result);
+  assert_matrices_are_equal(result, AB);
+}
+
+TEST(MatrixTest, Multiply2)
+{
+  vMatrix a = {{1, 2, 1, 2, 1},
+               {3, 4, 3, 4, 3},
+               {5, 6, 5, 6, 5},
+               {7, 8, 7, 8, 7},
+               {2, 1, 2, 1, 2},
+               {1, 1, 1, 1, 1},
+               {7, 8, 7, 8, 7},
+               {2, 1, 2, 1, 2}};
+  vMatrix b = {{1, 2, 1, 2, 1},
+               {3, 4, 3, 4, 3},
+               {5, 6, 5, 6, 5},
+               {7, 8, 7, 8, 7},
+               {2, 1, 2, 1, 2}};
+  vMatrix ab = {{28, 33, 28, 33, 28},
+                { 64, 75, 64, 75, 64},
+                {100, 117, 100, 117, 100},
+                {136, 159, 136, 159, 136},
+                { 26, 30, 26, 30, 26},
+                { 18, 21, 18, 21, 18},
+                {136, 159, 136, 159, 136},
+                { 26, 30, 26, 30, 26}};
+
+  auto A = construct_matrix(a);
+  cout << "The matrix A:" << endl;
+  print_matrix(A);
+  auto B = construct_matrix(b);
+  cout << "The matrix B:" << endl;
+  print_matrix(B);
+  auto AB = construct_matrix(ab);
+
+  auto result = A * B;
+  cout << "The matrix A * B:" << endl;
+  print_matrix(result);
+  assert_matrices_are_equal(result, AB);
 }
