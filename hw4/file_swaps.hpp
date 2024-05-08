@@ -28,17 +28,17 @@ void swapRowsInFile(std::fstream& file, int nRows, int nCols, int i, int j)
       auto k2 = n*nRows+j;  // Column major index of the swap value in row j
 
       double temp1;
-      file.seekg(k1, std::ios_base::beg);
+      file.seekg(k1 * sizeof(double), std::ios_base::beg);
       file.read(reinterpret_cast<char*>(&temp1), sizeof(double));
 
       double temp2;
-      file.seekg(k2, std::ios_base::beg);
+      file.seekg(k2 * sizeof(double), std::ios_base::beg);
       file.read(reinterpret_cast<char*>(&temp2), sizeof(double));
 
-      file.seekp(k1, std::ios_base::beg);
+      file.seekp(k1 * sizeof(double), std::ios_base::beg);
       file.write(reinterpret_cast<char*>(&temp2), sizeof(double));
 
-      file.seekp(k2, std::ios_base::beg);
+      file.seekp(k2 * sizeof(double), std::ios_base::beg);
       file.write(reinterpret_cast<char*>(&temp1), sizeof(double));
    }
 }
@@ -67,17 +67,17 @@ void swapColsInFile(std::fstream& file, int nRows, int nCols, int i, int j)
       auto k2 = j*nRows+m;  // Column major index of the swap value in row j
 
       double temp1;
-      file.seekg(k1, std::ios_base::beg);
+      file.seekg(k1 * sizeof(double), std::ios_base::beg);
       file.read(reinterpret_cast<char*>(&temp1), sizeof(double));
 
       double temp2;
-      file.seekg(k2, std::ios_base::beg);
+      file.seekg(k2 * sizeof(double), std::ios_base::beg);
       file.read(reinterpret_cast<char*>(&temp2), sizeof(double));
 
-      file.seekp(k1, std::ios_base::beg);
+      file.seekp(k1 * sizeof(double), std::ios_base::beg);
       file.write(reinterpret_cast<char*>(&temp2), sizeof(double));
 
-      file.seekp(k2, std::ios_base::beg);
+      file.seekp(k2 * sizeof(double), std::ios_base::beg);
       file.write(reinterpret_cast<char*>(&temp1), sizeof(double));
    }
 }
