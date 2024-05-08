@@ -5,16 +5,6 @@
 
 using namespace std;
 
-//class MatrixTest : public test::Test
-//{
-//  protected:
-//
-//  Matrix<float> mEmpty2x2_;
-//  Matrix<float> mA2x2_;
-//  Matrix<float> mB2x2_;
-//  Matrix<float> mAplusB2x2_;
-//};
-
 typedef std::vector<std::vector<float>> vMatrix;
 
 template<typename T>

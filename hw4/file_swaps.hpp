@@ -1,39 +1,85 @@
-void swapRowsInFile(std::fstream& file, int nRows, int nCols, int i, int j);
-void swapColsInFile(std::fstream& file, int nRows, int nCols, int i, int j);
+#ifndef FILE_SWAPS_HPP
+#define FILE_SWAPS_HPP
 
-// snippet
-#include<iostream>
-#include<fstream>
-#include<vector>
-#include<utility>
-#include<algorithm>
-#include<cstdlib>
-#include<ctime>
-#include<cstdio>
-#include<chrono>
-#include"fileswaps.hpp"
+#include <fstream>
+#include <stdexcept>
 
-int main(int argc, char* argv[])
+void swapRowsInFile(std::fstream& file, int nRows, int nCols, int i, int j)
 {
-    // Generate the matrix
-    std::vector<double> matrix(numRows * numCols);
-    // init matrix elements in column major order
-    // write the matrix to a file
-    std::fstream file(filename, std::ios::out | std::ios::binary);
-    file.write(reinterpret_cast<char*>(&matrix[0]), numRows * numCols * sizeof(double));
-    file.close();
-    // Open the file in read-write mode for swapping
-    std::fstream fileToSwap(filename, std::ios::in | std::ios::out | std::ios::binary);
-    // Get random indices i and j for row swapping
-    // Measure the time required for row swapping using file I/O
-    auto startTime = std::chrono::high_resolution_clock::now();
-    // Swap rows i and j in the file version of the matrix
-    swapRowsInFile(fileToSwap, numRows, numCols, i, j);
-    auto endTime = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> duration = endTime - startTime;
-    // Close the file after swapping
-    fileToSwap.close();
-    // ...
-    // after each problem size delete the test file
-    std::remove(filename.c_str());
+   // Assuming nRows,nCols > 0, and i,j are zero-based indices
+
+   // Bounds check
+   if(nRows < 1 || nCols < 1 || i < 0 || j < 0 || i >= nRows || j >= nCols)
+   {
+      throw std::invalid_argument("Invalid matrix dimensions");
+   }
+
+   // File check
+   file.seekg(0, std::ios_base::end);
+   long length = file.tellg();
+   if(!file.good() || length != nRows*nCols*sizeof(double))
+   {
+      throw std::invalid_argument("Invalid file");
+   }
+
+   for(auto n=0; n<nCols; ++n)
+   {
+      auto k1 = n*nRows+i;  // Column-major index of the swap value in row i
+      auto k2 = n*nRows+j;  // Column major index of the swap value in row j
+
+      double temp1;
+      file.seekg(k1, std::ios_base::beg);
+      file.read(reinterpret_cast<char*>(&temp1), sizeof(double));
+
+      double temp2;
+      file.seekg(k2, std::ios_base::beg);
+      file.read(reinterpret_cast<char*>(&temp2), sizeof(double));
+
+      file.seekp(k1, std::ios_base::beg);
+      file.write(reinterpret_cast<char*>(&temp2), sizeof(double));
+
+      file.seekp(k2, std::ios_base::beg);
+      file.write(reinterpret_cast<char*>(&temp1), sizeof(double));
+   }
 }
+
+void swapColsInFile(std::fstream& file, int nRows, int nCols, int i, int j)
+{
+   // Assuming nRows,nCols > 0, and i,j are zero-based indices
+
+   // Bounds check
+   if(nRows < 1 || nCols < 1 || i < 0 || j < 0 || i >= nRows || j >= nCols)
+   {
+      throw std::invalid_argument("Invalid matrix dimensions");
+   }
+
+   // File check
+   file.seekg(0, std::ios_base::end);
+   long length = file.tellg();
+   if(!file.good() || length != nRows*nCols*sizeof(double))
+   {
+      throw std::invalid_argument("Invalid file");
+   }
+
+   for(auto m=0; m<nRows; ++m)
+   {
+      auto k1 = i*nRows+m;  // Column-major index of the swap value in row i
+      auto k2 = j*nRows+m;  // Column major index of the swap value in row j
+
+      double temp1;
+      file.seekg(k1, std::ios_base::beg);
+      file.read(reinterpret_cast<char*>(&temp1), sizeof(double));
+
+      double temp2;
+      file.seekg(k2, std::ios_base::beg);
+      file.read(reinterpret_cast<char*>(&temp2), sizeof(double));
+
+      file.seekp(k1, std::ios_base::beg);
+      file.write(reinterpret_cast<char*>(&temp2), sizeof(double));
+
+      file.seekp(k2, std::ios_base::beg);
+      file.write(reinterpret_cast<char*>(&temp1), sizeof(double));
+   }
+}
+
+#endif // FILE_SWAPS_HPP

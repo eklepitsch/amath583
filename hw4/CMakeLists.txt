@@ -19,6 +19,7 @@ enable_testing()
 add_executable(
   matrix_test
   matrix_test.cpp
+  file_swaps_test.cpp
 )
 target_link_libraries(
   matrix_test
