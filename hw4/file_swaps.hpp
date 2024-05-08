@@ -9,7 +9,7 @@ void swapRowsInFile(std::fstream& file, int nRows, int nCols, int i, int j)
    // Assuming nRows,nCols > 0, and i,j are zero-based indices
 
    // Bounds check
-   if(nRows < 1 || nCols < 1 || i < 0 || j < 0 || i >= nRows || j >= nCols)
+   if(nRows < 1 || nCols < 1 || i < 0 || j < 0 || i >= nRows || j >= nRows)
    {
       throw std::invalid_argument("Invalid matrix dimensions");
    }
@@ -48,7 +48,7 @@ void swapColsInFile(std::fstream& file, int nRows, int nCols, int i, int j)
    // Assuming nRows,nCols > 0, and i,j are zero-based indices
 
    // Bounds check
-   if(nRows < 1 || nCols < 1 || i < 0 || j < 0 || i >= nRows || j >= nCols)
+   if(nRows < 1 || nCols < 1 || i < 0 || j < 0 || i >= nCols || j >= nCols)
    {
       throw std::invalid_argument("Invalid matrix dimensions");
    }

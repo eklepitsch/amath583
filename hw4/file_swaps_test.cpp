@@ -25,7 +25,7 @@ std::vector<double> ReadMatrixFromFile(std::string filename, int nRows, int nCol
    return matrix;
 }
 
-TEST(FileSwapsTest, SwapRows)
+TEST(FileSwapsTest, SwapRowsSquare)
 {
    size_t numRows = 3;
    size_t numCols = 3;
@@ -59,7 +59,7 @@ TEST(FileSwapsTest, SwapRows)
    print_matrix(matrix_after_swap, 3, 3);
 }
 
-TEST(FileSwapsTest, SwapCols)
+TEST(FileSwapsTest, SwapColsSquare)
 {
    size_t numRows = 3;
    size_t numCols = 3;
@@ -91,4 +91,72 @@ TEST(FileSwapsTest, SwapCols)
    auto matrix_after_swap = ReadMatrixFromFile(filename, 3, 3);
    cout << "Matrix after swap" << endl;
    print_matrix(matrix_after_swap, 3, 3);
+}
+
+TEST(FileSwapsTest, SwapRowsNotSquare)
+{
+   size_t numRows = 7;
+   size_t numCols = 4;
+   std::string filename = "./artifacts/matrix-swap-file";
+
+   // Write a matrix to a file
+   auto matrix = GenerateRandomMatrix<double>(numRows, numCols);
+   std::fstream file(filename, std::ios::out | std::ios::binary);
+   file.write(reinterpret_cast<char*>(matrix->data()),
+              matrix->size() * sizeof(double));
+   file.close();
+
+   // Read back the matrix
+   auto matrix_before_swap = ReadMatrixFromFile(filename, numRows, numCols);
+   cout << "Matrix before swap" << endl;
+   print_matrix(matrix_before_swap, numRows, numCols);
+
+   // Swap random rows
+   std::pair<int, int> indices = GetRandomIndices(numRows);
+   auto i = indices.first;
+   auto j = indices.second;
+   std::fstream fileToSwap(filename, std::ios::in | std::ios::out |
+                           std::ios::binary);
+   cout << "Swapping rows " << i << " and " << j << endl;
+   swapRowsInFile(fileToSwap, numRows, numCols, i, j);
+   fileToSwap.close();
+
+   // Read back the matrix and check the swap was correct
+   auto matrix_after_swap = ReadMatrixFromFile(filename, numRows, numCols);
+   cout << "Matrix after swap" << endl;
+   print_matrix(matrix_after_swap, numRows, numCols);
+}
+
+TEST(FileSwapsTest, SwapColsNotSquare)
+{
+   size_t numRows = 7;
+   size_t numCols = 4;
+   std::string filename = "./artifacts/matrix-swap-file";
+
+   // Write a matrix to a file
+   auto matrix = GenerateRandomMatrix<double>(numRows, numCols);
+   std::fstream file(filename, std::ios::out | std::ios::binary);
+   file.write(reinterpret_cast<char*>(matrix->data()),
+              matrix->size() * sizeof(double));
+   file.close();
+
+   // Read back the matrix
+   auto matrix_before_swap = ReadMatrixFromFile(filename, numRows, numCols);
+   cout << "Matrix before swap" << endl;
+   print_matrix(matrix_before_swap, numRows, numCols);
+
+   // Swap random rows
+   std::pair<int, int> indices = GetRandomIndices(numCols);
+   auto i = indices.first;
+   auto j = indices.second;
+   std::fstream fileToSwap(filename, std::ios::in | std::ios::out |
+                           std::ios::binary);
+   cout << "Swapping cols " << i << " and " << j << endl;
+   swapColsInFile(fileToSwap, numRows, numCols, i, j);
+   fileToSwap.close();
+
+   // Read back the matrix and check the swap was correct
+   auto matrix_after_swap = ReadMatrixFromFile(filename, numRows, numCols);
+   cout << "Matrix after swap" << endl;
+   print_matrix(matrix_after_swap, numRows, numCols);
 }
