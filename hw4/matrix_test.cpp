@@ -76,12 +76,22 @@ TEST(MatrixTest, SimpleConstruction)
   auto m = Matrix<float>(2, 2);
   cout << "Empty 2x2 matrix:" << endl;
   print_matrix<float>(m);
+  ASSERT_EQ(m(0, 0), 0);
+  ASSERT_EQ(m(0, 1), 0);
+  ASSERT_EQ(m(1, 0), 0);
+  ASSERT_EQ(m(1, 1), 0);
+
   m(0, 0) = 1;
   m(0, 1) = 2;
   m(1, 0) = 3;
   m(1, 1) = 4;
   cout << "Populated 2x2 matrix:" << endl;
   print_matrix<float>(m);
+
+  ASSERT_EQ(m(0, 0), 1);
+  ASSERT_EQ(m(0, 1), 2);
+  ASSERT_EQ(m(1, 0), 3);
+  ASSERT_EQ(m(1, 1), 4);
 }
 
 TEST(MatrixTest, VectorConstruction)
@@ -92,4 +102,17 @@ TEST(MatrixTest, VectorConstruction)
   auto m = construct_matrix(matrix);
   cout << "Vector constructed matrix:" << endl;
   print_matrix(m);
+
+  int i = 0;
+  for(auto row : matrix)
+  {
+    int j = 0;
+    for(auto value : row)
+    {
+      ASSERT_EQ(value, m(i, j));
+      j++;
+    }
+    i++;
+  }
+  
 }
