@@ -5,11 +5,15 @@
 #include<cstdlib>
 #include<ctime>
 #include <fstream>
+#include <functional>
 #include <iostream>
+#include <mutex>
+#include <thread>
 #include<utility>
 #include<vector>
 #include"file_swaps.hpp"
 #include "matrix-utils.hpp"
+
 
 long double write_square_matrix_to_file(size_t n)
 {
@@ -177,13 +181,13 @@ void problem_5()
 
 double f_x(double x)
 {
-   return sqrtl(1 + std::pow(1/x - (1/4)*x, 2));
+   return sqrtl(1 + std::pow((1/x) - 0.25*x, 2));
 }
 
-#include <functional>
-#include <thread>
-#include <atomic>
-#include <mutex>
+double x_squared(double x)
+{
+   return x * x;
+}
 
 void riemann(std::function<double(double)> f, double xi, double dx,
              unsigned n, std::mutex& mtx, double& shared_sum)
@@ -227,7 +231,8 @@ double riemann_sum_cxx_threads(std::function<double(double)> f, double xi,
 
 void problem_6()
 {
-   auto sum = riemann_sum_cxx_threads(f_x, 1, 6, 1000, 10);
+   auto sum = riemann_sum_cxx_threads(f_x, 1, 6, 1000000, 10);
+   //auto sum = riemann_sum_cxx_threads(x_squared, 0, 1, 1000000, 10);
    std::cout << "Rieman sum: " << std::setprecision(10) << sum << std::endl;
 }
 
