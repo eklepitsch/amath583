@@ -33,3 +33,8 @@ add_executable(
   hw4
   hw4.cpp
 )
+
+target_link_libraries(
+  hw4
+  pthread
+)

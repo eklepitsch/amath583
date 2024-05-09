@@ -1,5 +1,6 @@
 #include<algorithm>
 #include <chrono>
+#include <cmath>
 #include<cstdio>
 #include<cstdlib>
 #include<ctime>
@@ -174,9 +175,66 @@ void problem_5()
    results_file.close();
 }
 
+double f_x(double x)
+{
+   return sqrtl(1 + std::pow(1/x - (1/4)*x, 2));
+}
+
+#include <functional>
+#include <thread>
+#include <atomic>
+#include <mutex>
+
+void riemann(std::function<double(double)> f, double xi, double dx,
+             unsigned n, std::mutex& mtx, double& shared_sum)
+{
+   double sum = 0;
+   for(auto i=0; i<n; ++i)
+   {
+      double x = xi + dx * i;
+      double area = dx * f(x);
+      sum += area;
+   }
+
+   mtx.lock();
+   shared_sum += sum;
+   mtx.unlock();
+}
+
+double riemann_sum_cxx_threads(std::function<double(double)> f, double xi,
+                               double xf, unsigned npoints, unsigned nthreads)
+{
+   unsigned points_per_thread = npoints / nthreads;
+   unsigned leftover_points = npoints % nthreads;
+   double dx = (xf - xi)/npoints;
+
+   std::mutex sum_mutex;
+   double sum = 0;
+
+   std::vector<std::thread> threads;
+   threads.reserve(nthreads);
+   for(auto i = 0; i<nthreads; ++i)
+   {
+      threads.emplace_back(riemann, f, xi + i * dx, dx, points_per_thread,
+                           std::ref(sum_mutex), std::ref(sum));
+   }
+   for(auto i = 0; i<nthreads; ++i)
+   {
+      threads[i].join();
+   }
+   return sum;
+}
+
+void problem_6()
+{
+   auto sum = riemann_sum_cxx_threads(f_x, 1, 6, 10000000, 10);
+   std::cout << "Rieman sum: " << std::setprecision(10) << sum << std::endl;
+}
+
 int main()
 {
    //problem_4();
-   problem_5();
+   //problem_5();
+   problem_6();
    return 0;
 }
