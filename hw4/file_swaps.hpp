@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <stdexcept>
+#include <iostream>
 
 void swapRowsInFile(std::fstream& file, int nRows, int nCols, int i, int j)
 {
@@ -16,7 +17,7 @@ void swapRowsInFile(std::fstream& file, int nRows, int nCols, int i, int j)
 
    // File check
    file.seekg(0, std::ios_base::end);
-   long length = file.tellg();
+   auto length = file.tellg();
    if(!file.good() || length != nRows*nCols*sizeof(double))
    {
       throw std::invalid_argument("Invalid file");
@@ -55,7 +56,7 @@ void swapColsInFile(std::fstream& file, int nRows, int nCols, int i, int j)
 
    // File check
    file.seekg(0, std::ios_base::end);
-   long length = file.tellg();
+   auto length = file.tellg();
    if(!file.good() || length != nRows*nCols*sizeof(double))
    {
       throw std::invalid_argument("Invalid file");
