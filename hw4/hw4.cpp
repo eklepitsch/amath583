@@ -215,7 +215,7 @@ double riemann_sum_cxx_threads(std::function<double(double)> f, double xi,
    threads.reserve(nthreads);
    for(auto i = 0; i<nthreads; ++i)
    {
-      threads.emplace_back(riemann, f, xi + i * dx, dx, points_per_thread,
+      threads.emplace_back(riemann, f, xi + i * dx * points_per_thread, dx, points_per_thread,
                            std::ref(sum_mutex), std::ref(sum));
    }
    for(auto i = 0; i<nthreads; ++i)
@@ -227,7 +227,7 @@ double riemann_sum_cxx_threads(std::function<double(double)> f, double xi,
 
 void problem_6()
 {
-   auto sum = riemann_sum_cxx_threads(f_x, 1, 6, 10000000, 10);
+   auto sum = riemann_sum_cxx_threads(f_x, 1, 6, 1000, 10);
    std::cout << "Rieman sum: " << std::setprecision(10) << sum << std::endl;
 }
 
