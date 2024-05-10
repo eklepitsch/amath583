@@ -266,6 +266,24 @@ void problem_6()
       n <<= 1;
    }
 
+   n = 10;
+   while(n <= 1E6)
+   {
+      auto start= std::chrono::high_resolution_clock::now();
+      auto sum = riemann_sum_cxx_threads(f_x, 1, 6, n, 8);
+      auto stop = std::chrono::high_resolution_clock::now();
+      auto duration =
+         std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
+
+      double error = std::fabs(sum - EXACT_SOLUTION_PROBLEM_6);
+      error_results << std::fixed << std::setprecision(0) << n << ", " <<
+         std::scientific << std::setprecision(10) << error << ", " <<
+         std::log10(error) << std::endl;
+
+      n *= 10;
+   }
+
+   // Test code
    auto sum = riemann_sum_cxx_threads(f_x, 1, 6, 1000000, 9);
    //auto sum = riemann_sum_cxx_threads(x_squared, 0, 1, 1000000, 10);
    std::cout << "Rieman sum: " << std::setprecision(10) << sum << std::endl;
