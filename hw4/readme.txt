@@ -10,3 +10,8 @@ Run with mpi:
 
 mpirun -np 8 ./hw4_mpi
 
+Hyak:
+
+ssh evanklep@klone.hyak.uw.edu
+Password: i?z5HVqqL_kbL#8
+
