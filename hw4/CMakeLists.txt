@@ -60,3 +60,11 @@ target_link_libraries(
   hw4_p6
   pthread
 )
+
+# hw4_p7 and hw4_p9 use MPI and are compiled directly
+# in build.sh.
+
+# add_executable(
+#   hw4_p10
+#   src/p10.cpp
+# )
