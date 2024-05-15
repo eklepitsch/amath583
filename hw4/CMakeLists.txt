@@ -16,25 +16,47 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
+include_directories(include src)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
 add_executable(
-  matrix_test
-  matrix_test.cpp
-  file_swaps_test.cpp
+  matrix_class_test
+  src/matrix_class_test.cpp
 )
 target_link_libraries(
-  matrix_test
+  matrix_class_test
+  GTest::gtest_main
+)
+
+add_executable(
+  file_swaps_test
+  src/file_swaps_test.cpp
+)
+target_link_libraries(
+  file_swaps_test
   GTest::gtest_main
 )
 
 include(GoogleTest)
-gtest_discover_tests(matrix_test)
+gtest_discover_tests(matrix_class_test)
+gtest_discover_tests(file_swaps_test)
 
 add_executable(
-  hw4
-  hw4.cpp
+  hw4_p4
+  src/p4.cpp
+)
+
+add_executable(
+  hw4_p5
+  src/p5.cpp
+)
+
+add_executable(
+  hw4_p6
+  src/p6.cpp
 )
 
 target_link_libraries(
-  hw4
+  hw4_p6
   pthread
 )
