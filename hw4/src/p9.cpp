@@ -6,7 +6,29 @@
 template<typename T>
 void mpi_broadcast(T* data, int count, int root, MPI_Comm comm)
 {
-   return;
+   // Note: I assume that MPI_Initialize and MPI_Finalize are invoked by the
+   // caller (since the caller needs to know the group size to specify root).
+   int rank, size;
+   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+   MPI_Comm_size(MPI_COMM_WORLD, &size);
+
+   int count_as_bytes = count * sizeof(T);
+
+   // Cast the data to a byte array before sending
+   char* data_as_bytes = reinterpret_cast<char*>(data);
+
+   MPI_Bcast(data_as_bytes, count_as_bytes, MPI_UNSIGNED_CHAR,
+             root /*root*/, comm);
+
+   if(rank == root)
+   {
+      std::cout << "Process " << rank << " sent " << count_as_bytes
+         << " bytes as broadcast" << std::endl;
+   }
+   else
+   {
+      std::cout << "Process " << rank << " received broadcast." << std::endl;
+   }
 }
 
 int main(int argc, char** argv)

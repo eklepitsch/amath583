@@ -9,7 +9,9 @@ void my_broadcast(T* data, int count, int root, MPI_Comm comm)
    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
    MPI_Comm_size(MPI_COMM_WORLD, &size);
 
+   // Cast the data to a byte array before sending/receiving
    int count_as_bytes = count * sizeof(T);
+   char* data_as_bytes = reinterpret_cast<char*>(data);
 
    if(rank == root)
    {
@@ -19,9 +21,6 @@ void my_broadcast(T* data, int count, int root, MPI_Comm comm)
          // Don't send to self
          if(i != rank)
          {
-            // Cast the data to a byte array before sending
-            char* data_as_bytes = reinterpret_cast<char*>(data);
-
             MPI_Request req;
             MPI_Isend(data_as_bytes, count_as_bytes, MPI_UNSIGNED_CHAR,
                       i /*dest*/, 0 /*tag*/, comm, &req);
@@ -38,10 +37,8 @@ void my_broadcast(T* data, int count, int root, MPI_Comm comm)
    else
    {
       // Receiver process
-      // Allocate a space to receive the data
-      char* recv_buf = new char[count_as_bytes];
       MPI_Request req;
-      MPI_Irecv(recv_buf, count_as_bytes, MPI_UNSIGNED_CHAR,
+      MPI_Irecv(data_as_bytes, count_as_bytes, MPI_UNSIGNED_CHAR,
                 root /*src*/, 0 /*tag*/, comm, &req);
 
       // Wait for completion
@@ -49,7 +46,5 @@ void my_broadcast(T* data, int count, int root, MPI_Comm comm)
       MPI_Wait(&req, &status);
 
       std::cout << "Process " << rank << " received bytes" << std::endl;
-
-      delete[] recv_buf;
    }
 }
