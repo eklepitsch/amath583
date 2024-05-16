@@ -27,6 +27,7 @@ mpirun -np <num_procs> ./build/bin/hw4_p7 a                         # scaling ef
 mpirun -np <num_procs> ./build/bin/hw4_p7 b <num_partition_points>  # numerical error
 mpirun -np <num_procs> ./build/bin/hw4_p9 a <num_bytes>             # my_broadcast()
 mpirun -np <num_procs> ./build/bin/hw4_p9 b <num_bytes>             # MPI_Broadcast()
+./build/bin/hw4_p10
 
 The codes above write their results to ./artifacts.
 
@@ -69,7 +70,10 @@ Problem 9
 
 Problem 10
 ----------
-To do.
+./src/strassen.cpp
+./src/strassen_test.cpp
+./src/p10.cpp
+./plots/p10.png
 
 My handwritten solutions for Problems 1, 3, 8 are in the file
 evanklep_amath583_hw4.pdf.
