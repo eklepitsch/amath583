@@ -85,8 +85,8 @@ void problem_5()
       fileToSwap.close();
 
       results_file << std::fixed << std::setprecision(0) << n << ", " <<
-         std::scientific << std::setprecision(10) << row_duration << ", " <<
-         column_duration << std::endl;
+         std::scientific << std::setprecision(10) << std::log10(row_duration)
+         << ", " << std::log10(column_duration) << std::endl;
 
       n <<= 1;
    }
