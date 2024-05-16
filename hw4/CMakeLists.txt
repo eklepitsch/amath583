@@ -64,7 +64,17 @@ target_link_libraries(
 # hw4_p7 and hw4_p9 use MPI and are compiled directly
 # in build.sh.
 
-# add_executable(
-#   hw4_p10
-#   src/p10.cpp
-# )
+add_executable(
+  hw4_p10
+  src/p10.cpp
+)
+
+add_executable(
+  strassen_test
+  src/strassen_test.cpp
+)
+
+target_link_libraries(
+  strassen_test
+  GTest::gtest_main
+)

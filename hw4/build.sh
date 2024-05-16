@@ -8,7 +8,7 @@ INCLUDE_DIR=$(pwd)/include
 mkdir -p $BUILD_DIR
 cd $BUILD_DIR
 
-cmake ..
+cmake -DCMAKE_BUILD_TYPE=Debug ..
 make
 
 mpic++ -o $BUILD_DIR/bin/hw4_p7 -I$INCLUDE_DIR $SRC_DIR/p7.cpp
