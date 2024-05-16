@@ -5,7 +5,7 @@ Homework 4
 
 This is my submission for Homework 4.
 
-My code can be built using the script build.sh.  Note: requires CMake.
+My code is built using build.sh.  Note: requires CMake.
 
 This script will build several executables, located in ./build/bin:
    - matrix_class_test     (test cases for Problem 2)
@@ -14,8 +14,11 @@ This script will build several executables, located in ./build/bin:
    - file_swaps_test       (test cases for Problem 5)
    - hw4_p6                (Problem 6)
    - hw4_p7                (Problem 7; run with mpirun)
+   - hw4_p9                (Problem 9; run with mpirun)
+   - hw4_p10               (Problem 10)
+   - strassen_test         (test cases for Problem 10)
 
-In summary, run the following commands to build and run the code:
+Use the following commands to build and run the code:
 
 chmod +x build.sh
 ./build.sh
@@ -30,6 +33,9 @@ mpirun -np <num_procs> ./build/bin/hw4_p9 b <num_bytes>             # MPI_Broadc
 ./build/bin/hw4_p10
 
 The codes above write their results to ./artifacts.
+
+The slurm files that I used for submitting hw4_p7 and hw4_p9 to HYAK are
+located in ./scripts.
 
 The files associated with each problem are as follows:
 
@@ -59,6 +65,7 @@ Problem 6
 Problem 7
 ---------
 ./src/p7.cpp
+./scripts/p7.slurm
 ./plots/p7-scaling-efficiency.png
 ./plots/p7-error.png
 
@@ -66,6 +73,7 @@ Problem 9
 ---------
 ./include/my_broadcast.hpp
 ./src/p9.cpp
+./scripts/p9.slurm
 ./plots/p9.png
 
 Problem 10
