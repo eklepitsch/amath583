@@ -11,5 +11,5 @@ cd $BUILD_DIR
 cmake ..
 make
 
-mpic++ -o $BUILD_DIR/bin/hw4_p7 $SRC_DIR/p7.cpp
-#mpic++ -o $BUILD_DIR/bin/hw4_p9 $SRC_DIR/p9.cpp
+mpic++ -o $BUILD_DIR/bin/hw4_p7 -I$INCLUDE_DIR $SRC_DIR/p7.cpp
+mpic++ -o $BUILD_DIR/bin/hw4_p9 -I$INCLUDE_DIR $SRC_DIR/p9.cpp
