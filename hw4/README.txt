@@ -23,8 +23,10 @@ chmod +x build.sh
 ./build/bin/hw4_p5
 ./build/bin/hw4_p6
 # hw4_p7 takes arguments to specify whether to run part a or part b.
-mpirun -np <num_procs> ./build/bin/hw4_p7 a
-mpirun -np <num_procs> ./build/bin/hw4_p7 b <num_partition_points>
+mpirun -np <num_procs> ./build/bin/hw4_p7 a                         # scaling efficiency
+mpirun -np <num_procs> ./build/bin/hw4_p7 b <num_partition_points>  # numerical error
+mpirun -np <num_procs> ./build/bin/hw4_p9 a <num_bytes>             # my_broadcast()
+mpirun -np <num_procs> ./build/bin/hw4_p9 b <num_bytes>             # MPI_Broadcast()
 
 The codes above write their results to ./artifacts.
 
@@ -61,7 +63,9 @@ Problem 7
 
 Problem 9
 ---------
-To do.
+./include/my_broadcast.hpp
+./src/p9.cpp
+./plots/p9.png
 
 Problem 10
 ----------
