@@ -62,25 +62,22 @@ void swapColsInFile(std::fstream& file, int nRows, int nCols, int i, int j)
       throw std::invalid_argument("Invalid file");
    }
 
-   for(auto m=0; m<nRows; ++m)
-   {
-      auto k1 = i*nRows+m;  // Column-major index of the swap value in row i
-      auto k2 = j*nRows+m;  // Column major index of the swap value in row j
+   auto k1_start = i*nRows;  // Column-major index of the first element in the first column
+   auto k2_start = j*nRows;  // Column-major index of the first element in the second column
 
-      double temp1;
-      file.seekg(k1 * sizeof(double), std::ios_base::beg);
-      file.read(reinterpret_cast<char*>(&temp1), sizeof(double));
+   double temp1[nRows];  // Temporary storage area for a column
+   double temp2[nRows];
 
-      double temp2;
-      file.seekg(k2 * sizeof(double), std::ios_base::beg);
-      file.read(reinterpret_cast<char*>(&temp2), sizeof(double));
-
-      file.seekp(k1 * sizeof(double), std::ios_base::beg);
-      file.write(reinterpret_cast<char*>(&temp2), sizeof(double));
-
-      file.seekp(k2 * sizeof(double), std::ios_base::beg);
-      file.write(reinterpret_cast<char*>(&temp1), sizeof(double));
-   }
+   // Since we are in column major order, we can swap entire columns at a time.
+   file.seekg(k1_start * sizeof(double), std::ios_base::beg);
+   file.read(reinterpret_cast<char*>(temp1), sizeof(double)*nRows);
+   file.seekg(k2_start * sizeof(double), std::ios_base::beg);
+   file.read(reinterpret_cast<char*>(temp2), sizeof(double)*nRows);
+   
+   file.seekp(k1_start * sizeof(double), std::ios_base::beg);
+   file.write(reinterpret_cast<char*>(temp2), sizeof(double)*nRows);
+   file.seekp(k2_start * sizeof(double), std::ios_base::beg);
+   file.write(reinterpret_cast<char*>(temp1), sizeof(double)*nRows);
 }
 
 #endif // FILE_SWAPS_HPP
