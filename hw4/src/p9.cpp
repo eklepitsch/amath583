@@ -1,7 +1,9 @@
 #include "my_broadcast.hpp"
+#include <chrono>
 #include <cstdlib>
 #include <cstring>
-
+#include <fstream>
+#include <iomanip>
 
 template<typename T>
 void mpi_broadcast(T* data, int count, int root, MPI_Comm comm)
@@ -63,6 +65,9 @@ int main(int argc, char** argv)
    // Randomize the sender
    int sender = std::rand() % size;
 
+   MPI_Barrier(MPI_COMM_WORLD);
+   auto start = std::chrono::high_resolution_clock::now();
+
    if(!std::strcmp(argv[1], "a"))
    {
       // Homebrew broadcast
@@ -78,7 +83,25 @@ int main(int argc, char** argv)
       throw std::invalid_argument("First argument must be a or b");
    }
 
+   MPI_Barrier(MPI_COMM_WORLD);
+   auto stop = std::chrono::high_resolution_clock::now();
+
    MPI_Finalize();
+
+   if(rank == sender)
+   {
+      // Only the sender will record the elapsed time.
+      auto duration =
+         std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
+      long double elapsed_time = duration.count()*1.e-9;  // Convert duration to seconds
+
+      std::ofstream results;
+      results.open("./p9-results.csv", std::ios::ate | std::ios::app);
+      results << argv[1] << ", " << size << ", " << nbytes << ", "
+         << std::setprecision(10) << elapsed_time << ", "
+         << (long double)nbytes/elapsed_time << std::endl;
+      results.close();
+   }
 
    delete[] data;
    return 0;
