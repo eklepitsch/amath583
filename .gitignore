@@ -1,1 +1,10 @@
 hw4/build
+.vscode
+*.tar
+*.o
+*.venv
+*.out
+*artifacts*
+*xtst*
+*.png
+
