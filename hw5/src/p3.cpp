@@ -10,9 +10,11 @@ using namespace std;
 int main(int argc, char** argv)
 {
    ofstream results("./artifacts/p3.csv");
-   results << "n, l1_duration, l2_duration, l3_duration" << endl;
+   results << "n, l1_flops, l1_avg_time, L1 (daxpy), L1 (daxpy), l2_flops,"
+              " l2_avg_time, L2 (dgemv), L2 (dgemv), l3_flops, l3_avg_time,"
+              " L3 (dgemm), L3 (dgemm)" << endl;
 
-   unsigned n = 2;
+   unsigned long long n = 2;
    while(n <= 4096)
    {
       long double l1_elapsed = 0.0;
@@ -60,8 +62,27 @@ int main(int argc, char** argv)
       l2_avgtime = l2_elapsed / ntrials;
       l3_avgtime = l3_elapsed / ntrials;
 
-      results << n << ", " << std::setprecision(10) << l1_avgtime << ", "
-         << l2_avgtime << ", " << l3_avgtime << endl;
+      // daxpy flop count = 2n
+      unsigned long l1_flop = 2*n;
+      // dgemv flop count = 2nm + 3m, = 2n^2 + 3n when m=n
+      unsigned long long l2_flop = 2*n*n + 3*n;
+      // dgemm flop count = 2mnk + 3mn, = 2n^3 + 3n^2 when m=n=k
+      unsigned long long l3_flop = 2*n*n*n + 3*n*n;
+
+      results << n << ", " << std::setprecision(10)
+         << l1_flop << ", "
+         << l1_avgtime << ", "
+         << (double)l1_flop/l1_avgtime << ", "
+         << ((double)l1_flop/l1_avgtime)/1.e6 << ", "
+         << l2_flop << ", "
+         << l2_avgtime << ", "
+         << (double)l2_flop/l2_avgtime << ", "
+         << ((double)l2_flop/l2_avgtime)/1.e6 << ", "
+         << l3_flop << ", "
+         << l3_avgtime << ", "
+         << (double)l3_flop/l3_avgtime << ", "
+         << ((double)l3_flop/l3_avgtime)/1.e6
+         << endl;
 
       n *= 2;
    }
