@@ -42,9 +42,11 @@ using namespace std;
 //    return;
 // }
 
-void measure_cublas_gemm(unsigned long long n, unsigned ntrials, ofstream& results)
+void measure_cublas_gemm(unsigned long long n, unsigned ntrials,
+                         ofstream& results, cublasHandle_t& hndl)
 {
-   long double elapsed = 0.0;
+   // long double elapsed = 0.0;
+   float elapsed = 0.0;
    long double avgtime = 0.0;
 
    // Host-side matrices in memory (stack)
@@ -63,19 +65,23 @@ void measure_cublas_gemm(unsigned long long n, unsigned ntrials, ofstream& resul
 
    for(auto i=0; i<ntrials; ++i)
    {
-      cublasHandle_t hndl;
-      cublasCreate(&hndl);
       double alpha = 2.0;
       double beta = 2.0;
 
-      auto start = std::chrono::high_resolution_clock::now();
+      // auto start = std::chrono::high_resolution_clock::now();
+      cudaEvent_t start, stop;
+      cudaEventCreate(&start);
+      cudaEventCreate(&stop);
+      cudaEventRecord(start);
       cublasDgemm(hndl, CUBLAS_OP_N, CUBLAS_OP_N, n, n, n, &alpha,
                   dA, n, dB, n, &beta, dC, n);
-      auto stop = std::chrono::high_resolution_clock::now();
-      elapsed += std::chrono::duration_cast<std::chrono::nanoseconds>(
-            stop - start).count()*1.e-9;
-
-      cublasDestroy(hndl);
+      // auto stop = std::chrono::high_resolution_clock::now();
+      // elapsed += std::chrono::duration_cast<std::chrono::nanoseconds>(
+      //       stop - start).count()*1.e-9;
+      cudaEventRecord(stop);
+      cudaEventSynchronize(stop);
+      cudaEventElapsedTime(&elapsed, start, stop);
+      elapsed *= 1.e-3;  // Convert milliseconds to seconds
    }
    avgtime = elapsed/ntrials;
 
@@ -106,6 +112,14 @@ int main(int argc, char** argv)
    }
    unsigned long long max_dim = stoull(argv[1]);
 
+   cublasHandle_t hndl;
+   auto cublasStatus = cublasCreate(&hndl);
+   if(cublasStatus != CUBLAS_STATUS_SUCCESS)
+   {
+      cout << "CUBLAS initialization failed with status: " << cublasStatus << endl;
+      return 1;
+   }
+
    ofstream openblas_results("./artifacts/p4_openblas.csv");
    ofstream cublas_results("./artifacts/p4_cublas.csv");
 
@@ -118,7 +132,13 @@ int main(int argc, char** argv)
    {
       unsigned ntrials = 5;
       // measure_openblas_gemm(n, ntrials, openblas_results);
-      measure_cublas_gemm(n, ntrials, cublas_results);
+      measure_cublas_gemm(n, ntrials, cublas_results, hndl);
+   }
+
+   auto cublasDestroyStatus = cublasDestroy(hndl);
+   if(cublasDestroyStatus != CUBLAS_STATUS_SUCCESS)
+   {
+      cout << "CUBLAS destroy failed with status: " << cublasDestroyStatus << endl;
    }
 
    openblas_results.close();
