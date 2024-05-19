@@ -9,4 +9,5 @@ mkdir -p $BUILD_DIR
 mkdir -p $ARTIFACT_DIR
 
 g++ -g -I$INCLUDE_DIR -o $BUILD_DIR/xhw5_p3 $SRC_DIR/p3.cpp -lopenblas
-#g++ -I$INCLUDE_DIR -o $BUILD_DIR/xhw5_p3 $SRC_DIR/p3.cpp -lopenblas -lpthread
+nvcc -g -I$INCLUDE_DIR -o $BUILD_DIR/xhw5_p4 $SRC_DIR/p4.cpp \
+   -lopenblas -lcublas -lcudart
