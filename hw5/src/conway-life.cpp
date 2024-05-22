@@ -79,7 +79,7 @@ void updateGrid(std::vector<std::vector<bool>>& grid) {
 
 // Function to save the grid to a file
 void saveGridToFile(const std::vector<std::vector<bool>>& grid) {
-    std::ofstream outfile("conway_grid.txt");
+    std::ofstream outfile("./artifacts/conway_grid.txt");
 
     if (outfile.is_open()) {
         for (int i = 0; i < GRID_SIZE_X; ++i) {
@@ -100,7 +100,7 @@ int main() {
     int generations = 5; // Number of generations to simulate
 
     for (int gen = 0; gen < generations; ++gen) {
-        std::system("python3 conway_display.py"); // Call the Python script to display the grid
+        std::system("python3 ./src/conway_display.py"); // Call the Python script to display the grid
         
         printGrid(grid);
         updateGrid(grid);

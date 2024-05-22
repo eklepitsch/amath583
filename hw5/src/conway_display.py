@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
 # Load the grid data from the file
-grid = np.loadtxt('conway_grid.txt', dtype=int)
+grid = np.loadtxt('./artifacts/conway_grid.txt', dtype=int)
 grid = grid.reshape((20, 20))  # Reshape the grid to 2D
 
 # Set up the figure and axis
