@@ -5,6 +5,9 @@
 #include <cstdlib>
 #include <ctime>
 #include <sstream> //  std::istringstream
+#include <condition_variable>
+#include <mutex>
+#include <thread>
 
 
 #define MAX_THREADS 16
@@ -73,9 +76,39 @@ void printGrid(const std::vector<std::vector<bool>>& grid) {
     std::cout << std::endl;
 }
 
+void kernel(std::vector<std::vector<bool>>& grid, int gridSize, int rank,
+            std::mutex& mtx, std::condition_variable& cv)
+{
+
+}
+
 void updateGrid(std::vector<std::vector<bool>>& grid, int gridSize, int numThreads) {
     // Implementation of updateGrid function
     // Add your existing implementation here
+    std::vector<std::thread> threads;
+    threads.reserve(numThreads);
+
+    std::mutex mtx;
+    std::condition_variable cv;
+
+    for(int i=0; i<numThreads; ++i)
+    {
+        int subgridSize = gridSize / numThreads;
+        int startingRow = 0;  // Assume no horizontal partition
+        if(subgridSize == 0)
+        {
+            //TODO: Handle case of gridSize = 4, numThreads = 16 and
+            // gridSize = 8, numThreads = 16. In this case, we need vertical
+            // partitions (startingRow is not 0).
+        }
+        int startingColumn = i * subgridSize;
+        threads.emplace_back(kernel, std::ref(grid), gridSize, i,
+                             std::ref(mtx), std::ref(cv));
+    }
+    for(auto& thread : threads)
+    {
+        thread.join();
+    }
 }
 
 int main(int argc, char *argv[]) {

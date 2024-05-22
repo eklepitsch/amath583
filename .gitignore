@@ -8,4 +8,4 @@ hw4/build
 *xtst*
 *.png
 *.pdf
-
+*.cu
