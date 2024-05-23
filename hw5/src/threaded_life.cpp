@@ -153,8 +153,8 @@ void updateGrid(std::vector<std::vector<bool>>& grid, int gridSize, int numThrea
         // numThreads is 1, 4, or 16, so the following division is valid
         int subgridSize = gridSize / std::sqrt(numThreads);
 
-        int startingColumn = i % (gridSize / subgridSize);
-        int startingRow = i / (gridSize / subgridSize);
+        int startingColumn = (i * subgridSize) % gridSize;
+        int startingRow = ((i * subgridSize) / gridSize) * subgridSize;
         int endingColumn = startingColumn + subgridSize;
         int endingRow = startingRow + subgridSize;
         threads.emplace_back(kernel, std::ref(grid), std::ref(newGrid),
@@ -184,8 +184,8 @@ int main(int argc, char *argv[]) {
     }
 
     std::vector<std::vector<bool>> grid;
-    generateGrid(grid, gridSize);
-    saveGridToFile(grid, gridSize, "./artifacts/conway_initial_state_" + std::to_string(gridSize) + ".txt");
+    // generateGrid(grid, gridSize);
+    // saveGridToFile(grid, gridSize, "./artifacts/conway_initial_state_" + std::to_string(gridSize) + ".txt");
 
     // Read initial state from file
     readInitialStateFromFile(grid, gridSize, "./artifacts/conway_initial_state_" + std::to_string(gridSize) + ".txt");
