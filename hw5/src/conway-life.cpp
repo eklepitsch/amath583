@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <cstdio>
+#include <sstream> //  std::istringstream
 
 #define GRID_SIZE_X 20
 #define GRID_SIZE_Y 20
@@ -93,11 +94,35 @@ void saveGridToFile(const std::vector<std::vector<bool>>& grid) {
     }
 }
 
+void readInitialStateFromFile(std::vector<std::vector<bool>>& grid, int gridSize, const std::string& filename) {
+    std::ifstream infile(filename);
+    
+    if (infile.is_open()) {
+        grid.clear();
+        std::string line;
+        while (std::getline(infile, line)) {
+            std::vector<bool> row;
+            std::istringstream iss(line);
+            int value;
+            while (iss >> value) {
+                row.push_back(value == 1);
+            }
+            grid.push_back(row);
+        }
+        infile.close();
+        std::cout << "Initial state read from file: " << filename << std::endl;
+    } else {
+        std::cerr << "Unable to open file: " << filename << std::endl;
+    }
+}
+
 int main() {
     std::vector<std::vector<bool>> grid;
-    generateGrid(grid);
+    // generateGrid(grid);
+    auto gridSize = GRID_SIZE_X;
+    readInitialStateFromFile(grid, gridSize, "./artifacts/conway_initial_state_" + std::to_string(gridSize) + ".txt");
     
-    int generations = 5; // Number of generations to simulate
+    int generations = 1; // Number of generations to simulate
 
     for (int gen = 0; gen < generations; ++gen) {
         std::system("python3 ./src/conway_display.py"); // Call the Python script to display the grid
