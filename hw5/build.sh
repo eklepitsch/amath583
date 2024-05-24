@@ -23,5 +23,9 @@ fi
 # nvcc -c -arch sm_53 -o $SRC_DIR/p4.o -I$INCLUDE_DIR $SRC_DIR/p4.cu
 # g++ -o $BUILD_DIR/xhw5_p4 $SRC_DIR/p4.o -lopenblas -lcublas -lcudart
 
-g++ -g -O0 -I$INCLUDE_DIR -o $BUILD_DIR/xhw5_p1 $SRC_DIR/threaded_life.cpp -lpthread
-g++ -g -O0 -I$INCLUDE_DIR -o $BUILD_DIR/xhw5_example_p1 $SRC_DIR/conway-life.cpp -lpthread
+g++ -g -O0 -I$INCLUDE_DIR -o $BUILD_DIR/xhw5_p1 \
+   $SRC_DIR/threaded_life.cpp $SRC_DIR/test-threaded_life.cpp -lpthread
+g++ -g -O0 -I$INCLUDE_DIR -o $BUILD_DIR/xhw5_example_p1 \
+   $SRC_DIR/conway-life.cpp -lpthread
+g++ -g -O0 -I$INCLUDE_DIR -o $BUILD_DIR/xhw5_compare_grids \
+   $SRC_DIR/conway-life-compare-grids.cpp

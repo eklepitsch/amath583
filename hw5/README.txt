@@ -21,8 +21,20 @@ The codes above write their results to ./artifacts.
 
 The files associated with each problem are as follows:
 
+Problem 1
+---------
+./src/threaded_life.cpp
+./src/test-threaded_life.cpp
+
+Problem 2
+---------
+
 Problem 3
 ---------
 ./src/p3.cpp
 ./plots/p3-log-scale.png
 ./plots/p3-normal-scale.png
+
+Problem 4
+---------
+./src/p4.cpp
