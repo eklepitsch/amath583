@@ -1,4 +1,6 @@
 hw4/build
+hw5/build
+examples/kr-cuda-examples/x*
 .vscode
 *.tar
 *.o

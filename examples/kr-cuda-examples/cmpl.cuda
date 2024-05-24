@@ -1,8 +1,14 @@
-nvcc -o xchk-dev -arch sm_75 cpp-chk-dev.cpp -L/usr/local/cuda/lib64 -lcudart -lm
-cp cpp-cuda-managed.cpp cpp-cuda-managed.cu; nvcc -c -arch sm_75 cpp-cuda-managed.cu ; g++ -o xmanaged_mem cpp-cuda-managed.o -L/usr/local/cuda/lib64 -lcudart -lm 
-cp cpp-memsymb.cpp cpp-memsymb.cu; nvcc -c -arch sm_75 cpp-memsymb.cu ; g++ -o xmemsymb cpp-memsymb.o -L/usr/local/cuda/lib64 -lcudart -lm 
-cp cpp-cuda-slm.cpp cpp-cuda-slm.cu; nvcc -c -arch sm_75 cpp-cuda-slm.cu ; g++ -o xcuda-slm cpp-cuda-slm.o -L/usr/local/cuda/lib64 -lcudart -lm 
-cp cpp-cuda-strm.cpp cpp-cuda-strm.cu; nvcc -c -arch sm_75 cpp-cuda-strm.cu ; g++ -o xcuda-strm cpp-cuda-strm.o -L/usr/local/cuda/lib64 -lcudart -lm 
-cp cpp-cuda-strm-distinct.cpp cpp-cuda-strm-distinct.cu; nvcc -c -arch sm_75 cpp-cuda-strm-distinct.cu ; g++ -o xcuda-strm-distinct cpp-cuda-strm-distinct.o -L/usr/local/cuda/lib64 -lcudart -lm 
-cp cpp-cuda-cublas-gemm.cpp cpp-cuda-cublas-gemm.cu; nvcc -c -arch sm_75 cpp-cuda-cublas-gemm.cu ; g++ -o xcublas-sgemm -std=c++11 cpp-cuda-cublas-gemm.o -L/usr/local/cuda/lib64 -lcublas -lcudart -lm
-cp cpp-atomic-ops.cpp cpp-atomic-ops.cu; nvcc -c -arch sm_75 cpp-atomic-ops.cu; g++ -o xatomic-ops -std=c++11 cpp-atomic-ops.o -L/usr/local/cuda/lib64 -lcudart -lm
+#!/bin/bash
+
+nvcc -o xchk-dev -arch sm_53 cpp-chk-dev.cpp -L/usr/local/cuda/lib64 -lcudart -lm
+
+# cp cpp-cuda-managed.cpp cpp-cuda-managed.cu;
+# nvcc -c -arch sm_53 cpp-cuda-managed.cu;
+# g++ -o xmanaged_mem cpp-cuda-managed.o -L/usr/local/cuda/lib64 -lcudart -lm
+
+# cp cpp-memsymb.cpp cpp-memsymb.cu; nvcc -c -arch sm_53 cpp-memsymb.cu ; g++ -o xmemsymb cpp-memsymb.o -L/usr/local/cuda/lib64 -lcudart -lm 
+# cp cpp-cuda-slm.cpp cpp-cuda-slm.cu; nvcc -c -arch sm_53 cpp-cuda-slm.cu ; g++ -o xcuda-slm cpp-cuda-slm.o -L/usr/local/cuda/lib64 -lcudart -lm 
+# cp cpp-cuda-strm.cpp cpp-cuda-strm.cu; nvcc -c -arch sm_53 cpp-cuda-strm.cu ; g++ -o xcuda-strm cpp-cuda-strm.o -L/usr/local/cuda/lib64 -lcudart -lm 
+# cp cpp-cuda-strm-distinct.cpp cpp-cuda-strm-distinct.cu; nvcc -c -arch sm_53 cpp-cuda-strm-distinct.cu ; g++ -o xcuda-strm-distinct cpp-cuda-strm-distinct.o -L/usr/local/cuda/lib64 -lcudart -lm 
+# cp cpp-cuda-cublas-gemm.cpp cpp-cuda-cublas-gemm.cu; nvcc -c -arch sm_53 cpp-cuda-cublas-gemm.cu ; g++ -o xcublas-sgemm -std=c++11 cpp-cuda-cublas-gemm.o -L/usr/local/cuda/lib64 -lcublas -lcudart -lm
+# cp cpp-atomic-ops.cpp cpp-atomic-ops.cu; nvcc -c -arch sm_53 cpp-atomic-ops.cu; g++ -o xatomic-ops -std=c++11 cpp-atomic-ops.o -L/usr/local/cuda/lib64 -lcudart -lm
