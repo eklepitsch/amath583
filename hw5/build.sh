@@ -28,8 +28,8 @@ g++ -g -O0 -I$INCLUDE_DIR -o $BUILD_DIR/xhw5_compare_grids \
    $SRC_DIR/conway-life-compare-grids.cpp
 
 # Problem 2
-# g++ -g -O0 -std=c++14 -o $BUILD_DIR/xelevator -I$INCLUDE_DIR \
-#    $SRC_DIR/hw5-elevator.cpp -lpthread
+g++ -g -O0 -std=c++14 -o $BUILD_DIR/xelevator -I$INCLUDE_DIR \
+   $SRC_DIR/hw5-elevator.cpp -lpthread
 
 # Problem 3
 g++ -g -I$INCLUDE_DIR -o $BUILD_DIR/xhw5_p3 $SRC_DIR/p3.cpp -lopenblas

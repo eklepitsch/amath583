@@ -87,6 +87,7 @@ void elevator(int id) {
     int occupancy = 0;
 
     std::set<int> next_floors;
+    int pickup_floor = 0;
 
     while (true) {
         if(!elevator_queues[id].empty() && occupancy < MAX_OCCUPANCY)
@@ -97,12 +98,12 @@ void elevator(int id) {
         {
             // Peek at the next item in the global queue
             pair<int, int> next = global_queue.front();
-            auto pickup_floor = next.first;
+            pickup_floor = next.first;
             auto direction = elevator_directions[id];
             if(is_stop_on_the_way(direction, curr_floor, pickup_floor))
             {
                 // Move the request from the global queue to the elevator queue
-                elevator_queues[id].push_back(next);
+                elevator_queues[id].push(next);
                 global_queue.pop();
             }
         }
