@@ -51,8 +51,8 @@ void threadedTranspose(std::vector<int> &matrix, int rows, int cols, int nthread
    int leftovers = rows % nthreads;
    for (int i = 0; i < nthreads; ++i)
    {
-      int starting_row = i * rows / nthreads;
-      int ending_row = (i + 1) * rows / nthreads;
+      int starting_row = i * (rows / nthreads);
+      int ending_row = (i + 1) * (rows / nthreads);
       if(i == nthreads - 1)
       {
          // Last thread gets the leftover rows that did not divide evenly.
