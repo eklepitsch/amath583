@@ -94,8 +94,8 @@ int main(int argc, char *argv[]) {
     }
 
     std::vector<std::vector<bool>> grid;
-    // generateGrid(grid, gridSize);
-    // saveGridToFile(grid, gridSize, "./artifacts/conway_initial_state_" + std::to_string(gridSize) + ".txt");
+    generateGrid(grid, gridSize);
+    saveGridToFile(grid, gridSize, "./artifacts/conway_initial_state_" + std::to_string(gridSize) + ".txt");
 
     // Read initial state from file
     readInitialStateFromFile(grid, gridSize, "./artifacts/conway_initial_state_" + std::to_string(gridSize) + ".txt");

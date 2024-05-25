@@ -16,6 +16,8 @@ if [ ! -d "$VENV_DIR" ]; then
   pip install numpy matplotlib PyQt5
 fi
 
+set -x
+
 # Problem 1
 g++ -g -O0 -I$INCLUDE_DIR -o $BUILD_DIR/xhw5_p1 \
    $SRC_DIR/threaded_life.cpp $SRC_DIR/test-threaded_life.cpp -lpthread
