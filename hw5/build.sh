@@ -16,19 +16,21 @@ if [ ! -d "$VENV_DIR" ]; then
   pip install numpy matplotlib PyQt5
 fi
 
-# g++ -g -I$INCLUDE_DIR -o $BUILD_DIR/xhw5_p3 $SRC_DIR/p3.cpp -lopenblas
-# #nvcc -g -O3 -I$INCLUDE_DIR -o $BUILD_DIR/xhw5_p4 $SRC_DIR/p4.cpp -lopenblas -lcublas -lcudart
+# Problem 1
+g++ -g -O0 -I$INCLUDE_DIR -o $BUILD_DIR/xhw5_p1 \
+   $SRC_DIR/threaded_life.cpp $SRC_DIR/test-threaded_life.cpp -lpthread
+g++ -g -O0 -I$INCLUDE_DIR -o $BUILD_DIR/xhw5_example_p1 \
+   $SRC_DIR/conway-life.cpp -lpthread
+g++ -g -O0 -I$INCLUDE_DIR -o $BUILD_DIR/xhw5_compare_grids \
+   $SRC_DIR/conway-life-compare-grids.cpp
 
-# cp $SRC_DIR/p4.cpp $SRC_DIR/p4.cu
-# nvcc -c -arch sm_53 -o $SRC_DIR/p4.o -I$INCLUDE_DIR $SRC_DIR/p4.cu
-# g++ -o $BUILD_DIR/xhw5_p4 $SRC_DIR/p4.o -lopenblas -lcublas -lcudart
+# Problem 2
+# g++ -g -O0 -std=c++14 -o $BUILD_DIR/xelevator -I$INCLUDE_DIR \
+#    $SRC_DIR/hw5-elevator.cpp -lpthread
 
-# g++ -g -O0 -I$INCLUDE_DIR -o $BUILD_DIR/xhw5_p1 \
-#    $SRC_DIR/threaded_life.cpp $SRC_DIR/test-threaded_life.cpp -lpthread
-# g++ -g -O0 -I$INCLUDE_DIR -o $BUILD_DIR/xhw5_example_p1 \
-#    $SRC_DIR/conway-life.cpp -lpthread
-# g++ -g -O0 -I$INCLUDE_DIR -o $BUILD_DIR/xhw5_compare_grids \
-#    $SRC_DIR/conway-life-compare-grids.cpp
+# Problem 3
+g++ -g -I$INCLUDE_DIR -o $BUILD_DIR/xhw5_p3 $SRC_DIR/p3.cpp -lopenblas
 
-g++ -g -O0 -std=c++14 -o $BUILD_DIR/xelevator -I$INCLUDE_DIR \
-   $SRC_DIR/hw5-elevator.cpp -lpthread
+# Problem 4
+nvcc -c -O3 -I$INCLUDE_DIR -arch sm_50 -o $BUILD_DIR/p4.o $SRC_DIR/p4.cpp
+g++ -g -o $BUILD_DIR/xhw5_p4 $BUILD_DIR/p4.o -lcudart -lopenblas -lcublas -lm

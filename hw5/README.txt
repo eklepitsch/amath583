@@ -9,13 +9,19 @@ My code is built using build.sh.  Note: requires OpenBLAS to be installed
 (uses `-lopenblas` when compiling).
 
 This script will build several executables, located in ./build:
+   - xhw5_p1               (Problem 1)
+   - xelevator             (Problem 2)
    - xhw5_p3               (Problem 3)
+   - xhw5_p4               (Problem 4)
 
 Use the following commands to build and run the code:
 
 chmod +x build.sh
 ./build.sh
+./build/xhw5_p1 <gridSize> <numThreads>
+./build/xelevator <numPeople>
 ./build/xhw5_p3
+./build/xhw5_p4 <maxMatrixDimension>
 
 The codes above write their results to ./artifacts.
 
@@ -40,3 +46,6 @@ Problem 3
 Problem 4
 ---------
 ./src/p4.cpp
+./scripts/p4.slurm
+./plots/p4-log-scale.png
+./plots/p4-normal-scale.png
