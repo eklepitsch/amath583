@@ -13,6 +13,7 @@ This script will build several executables, located in ./build:
    - xelevator             (Problem 2)
    - xhw5_p3               (Problem 3)
    - xhw5_p4               (Problem 4)
+   - xhw5_p5               (Problem 5)
 
 Use the following commands to build and run the code:
 
@@ -22,6 +23,7 @@ chmod +x build.sh
 ./build/xelevator <numPeople>
 ./build/xhw5_p3
 ./build/xhw5_p4 <maxMatrixDimension>
+./build/xhw5_p5 <m> <n> <numThreads>
 
 The codes above write their results to ./artifacts.
 
@@ -36,6 +38,8 @@ Problem 2
 ---------
 ./include/hw5-elevator.hpp
 ./src/hw5-elevator.cpp
+Note: I was not able to complete this problem, but I am submitting the code
+      that I wrote for partial credit (if available).
 
 Problem 3
 ---------
@@ -49,3 +53,8 @@ Problem 4
 ./scripts/p4.slurm
 ./plots/p4-log-scale.png
 ./plots/p4-normal-scale.png
+
+Problem 5
+---------
+./include/transpose.hpp
+./src/p5.cpp
