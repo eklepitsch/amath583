@@ -11,14 +11,21 @@
 #include<cblas.h>
 #include<lapacke.h>
 
-int main()
+int main(int argc, char** argv)
 {
+    if(argc != 2)
+    {
+        std::cerr << "Usage: " << argv[0] << " <max_problem_size>" << std::endl;
+        return 1;
+    }
+    int max_problem_size = std::stoi(argv[1]);
+
     std::ofstream results("artifacts/p1-results.csv");
     results << "problem_size, residual, log(residual),"
                " normalized error, log(normalized error)" << std::endl; 
     int problem_size = 16;
 
-    while(problem_size <= 4096)
+    while(problem_size <= max_problem_size)
     {
         int ma = problem_size;
         int na = problem_size;
