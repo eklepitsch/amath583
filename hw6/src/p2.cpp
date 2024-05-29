@@ -27,33 +27,43 @@ int main(int argc, char** argv)
       unsigned long size = nbytes * sizeof(uint8_t);
       for(unsigned i=0; i<ntrials; i++)
       {
-         float h2d_time, d2h_time;
+         float h2d_time = 0.0;
+         float d2h_time = 0.0;
          uint8_t* hBuf = (uint8_t*)malloc(size);
          uint8_t* dBuf;
          cudaMalloc((void**)&dBuf, size);
 
-         cudaEvent_t start, stop;
-         cudaEventCreate(&start);
-         cudaEventCreate(&stop);
+         // cudaEvent_t start, stop;
+         // cudaEventCreate(&start);
+         // cudaEventCreate(&stop);
 
-         cudaEventRecord(start);
+         auto start = std::chrono::high_resolution_clock::now();
+         // cudaEventRecord(start);
          cudaMemcpy(dBuf, hBuf, size, cudaMemcpyHostToDevice);
-         cudaEventRecord(stop);
-         cudaEventSynchronize(stop);
-         cudaEventElapsedTime(&h2d_time, start, stop);
-         h2d_avgtime += h2d_time;
+         auto stop = std::chrono::high_resolution_clock::now();
+         h2d_avgtime += std::chrono::duration_cast<std::chrono::nanoseconds>(
+               stop - start).count()*1.e-6;
+         // cudaEventRecord(stop);
+         // cudaEventSynchronize(stop);
+         // cudaEventElapsedTime(&h2d_time, start, stop);
 
-         cudaEventDestroy(start);
-         cudaEventDestroy(stop);
-         cudaEventCreate(&start);
-         cudaEventCreate(&stop);
+         // h2d_avgtime += h2d_time;
 
-         cudaEventRecord(start);
+         // cudaEventDestroy(start);
+         // cudaEventDestroy(stop);
+         // cudaEventCreate(&start);
+         // cudaEventCreate(&stop);
+
+         start = std::chrono::high_resolution_clock::now();
+         // cudaEventRecord(start);
          cudaMemcpy(hBuf, dBuf, size, cudaMemcpyDeviceToHost);
-         cudaEventRecord(stop);
-         cudaEventSynchronize(stop);
-         cudaEventElapsedTime(&d2h_time, start, stop);
-         d2h_avgtime += d2h_time;
+         stop = std::chrono::high_resolution_clock::now();
+         d2h_avgtime += std::chrono::duration_cast<std::chrono::nanoseconds>(
+               stop - start).count()*1.e-6;
+         // cudaEventRecord(stop);
+         // cudaEventSynchronize(stop);
+         // cudaEventElapsedTime(&d2h_time, start, stop);
+         // d2h_avgtime += d2h_time;
 
          free(hBuf);
          cudaFree(dBuf);
@@ -62,10 +72,10 @@ int main(int argc, char** argv)
       d2h_avgtime /= ntrials;
 
       results << size << ", " << std::setprecision(10)
-         << h2d_avgtime << ", "
-         << (float)size/h2d_avgtime << ", "
-         << d2h_avgtime << ", "
-         << (float)size/d2h_avgtime
+         << h2d_avgtime * 1.e-3 << ", "
+         << (float)size/(h2d_avgtime * 1.e3) << ", "
+         << d2h_avgtime * (1.e-3) << ", "
+         << (float)size/(d2h_avgtime * 1.e3)
          << std::endl;
    }
    return 0;
