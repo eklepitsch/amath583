@@ -21,7 +21,7 @@ int main(int argc, char** argv)
 
    for(unsigned long nbytes=8; nbytes<=max_copy_size; nbytes*=2)
    {
-      unsigned ntrials = 3;
+      unsigned ntrials = 1000;
       float h2d_avgtime = 0.0;
       float d2h_avgtime = 0.0;
       unsigned long size = nbytes * sizeof(uint8_t);

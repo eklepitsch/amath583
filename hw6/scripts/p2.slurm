@@ -8,7 +8,7 @@
 #SBATCH --ntasks-per-node=4
 #SBATCH --mem=5G
 #SBATCH --gpus=1
-#SBATCH --time=00-00:03:00
+#SBATCH --time=00-00:08:00
 
 #SBATCH --chdir=/gscratch/amath/evanklep/hw6
 #SBATCH --export=all
@@ -31,3 +31,5 @@ nvcc -c -O3 -I. -I/gscratch/amath/roche-libs/include -arch sm_75 p2.cpp
 g++ -g -o xhw6_p2 p2.o -L/sw/cuda/12.0.0/lib64 \
    -L/gscratch/amath/roche-libs/lib -lcudart -lm
 
+# Run the code
+./xhw6_p2 268435456
