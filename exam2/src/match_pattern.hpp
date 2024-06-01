@@ -15,8 +15,19 @@ void matchPattern(const string& text, const string& pattern) {
     vector<int> occurrences;
 
     // execute your pattern matching
-    if (match) occurrences.push_back(i);
-
+    for(auto i = 0; i < n; ++i)
+    {
+        bool match = true;
+        for(auto j = 0; j < m; ++j)
+        {
+            if(text[i+j] != pattern[j])
+            {
+                match = false;
+                break;
+            }
+        }
+        if(match) { occurrences.push_back(i); }   
+    }
 
     // print the results
     cout << "Pattern found " << occurrences.size() << " times at positions: ";
