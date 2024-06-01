@@ -4,4 +4,7 @@ salloc -A amath -p gpu-rtx6k -N 1 -c 4 --mem=1G --time=0:10:00
 
 salloc -A amath -p ckpt --gpus-per-node=a40:1 --mem=10G --time=0:20:00 --job-name=evanklep_testing
 
-apptainer shell --nv -B /gscratch/amath/evanklep --pwd /source docker://nvcr.io/nvidia/nvhpc:23.1-devel-cuda12.0-ubuntu20.04
+salloc -A amath -p gpu-rtx6k -N 1 -c 4 --gpus=1 --mem=5G --time=0:05:00 --job-name=evanklep_testing
+
+
+268435456
