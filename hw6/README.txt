@@ -22,6 +22,8 @@ chmod +x build.sh
 
 The codes above write their results to ./artifacts.
 
+My working directory on Hyak is /gscratch/amath/evanklep/hw6.
+
 The files associated with each problem are as follows:
 
 Problem 1
@@ -44,4 +46,4 @@ Problem 3
 
 Problem 4
 ---------
-evanklep-hw6.pdf (handwritten solutions)
+evanklep_hw6.pdf (handwritten solutions)
