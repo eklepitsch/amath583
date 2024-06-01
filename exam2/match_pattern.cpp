@@ -1,0 +1,44 @@
+// k8r@uw.edu
+// final exam simple starter code
+// compiling:
+// g++ -std=c++14 -c -I./ match_pattern.cpp ; g++ -std=c++14 -o xmatch_pattern match_pattern.o 
+// running:
+// ./xmatch_pattern 
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <cmath>
+
+using namespace std;
+
+#include "match_pattern.hpp"
+
+int main() {
+    // Read the file content
+    ifstream inputFile("output.txt");
+    if (!inputFile) {
+        cerr << "Error: Unable to open input file." << endl;
+        return 1;
+    }
+    string text((istreambuf_iterator<char>(inputFile)), istreambuf_iterator<char>());
+    inputFile.close();
+
+    // Get the pattern to match
+    const std::string alphabet = "ABCDEFGHIJKLMN";
+    string pattern;
+    cout << "Enter a string (length <= 7) from alphabet {" << alphabet << "} to match: ";
+    cin >> pattern;
+
+    if (pattern.length() > 7) {
+        cerr << "Error: Pattern length must be 7 or less." << endl;
+        return 1;
+    }
+
+    // call your pattern matching algorithm
+    matchPattern(text, pattern);
+
+    return 0;
+}
+
