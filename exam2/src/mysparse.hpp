@@ -5,8 +5,6 @@
 
 #include <vector>
 #include <utility> // for std::pair
-#include <algorithm>  // for std::set_intersection
-#include <execution>  // for std::execution::seq
 
 using namespace std;
 
