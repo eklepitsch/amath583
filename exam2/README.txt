@@ -39,3 +39,7 @@ Problem 3
 Problem 4
 ---------
 evanklep_exam2.pdf (handwritten solution)
+
+
+Note: My handwritten solutions for problems 2 and 4 are in evanklep_exam2.pdf.
+My results for the pattern matching in problem 3 are in p3-results.txt.
